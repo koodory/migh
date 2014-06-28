@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>photo_write</title>
+<meta name="viewport"
+  content="width=device-width, height=device-hight, 
+  initial-scale=1.0,minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"
+  charset="utf-8">
+<link rel="stylesheet" href="../css/jquery.mobile-1.4.2.min.css" />
+<link rel="stylesheet" href="../css/common.css">
+<link rel="stylesheet" href="../css/common_euihyun.css">
+
+</head>
+
+<body>
+  <div data-role="page">
+    <div data-role='header' data-theme='b' data-add-back-btn='true'
+      class="txtCenterPosition">
+      <h1>포토앨범</h1>
+    </div>
+
+    <div data-role='content' class="txtCenterPosition">
+      <h1 class='text-center'>포토앨범 만들기</h1>
+      <div class='posRight'>
+        <span>작성자<span>2014.05.17</span></span>
+      </div>
+
+      <form method="post" action="#" modelAttribute="uploadForm"
+        enctype="multipart/form-data">
+        <div data-role="fieldcontain">
+          <label for="title" class="posLeft">제목:</label> <input id="title"
+            type="text" name="title" value="" />
+        </div>
+        <div data-role="fieldcontain">
+          <label for="textarea" class="posLeft">내용:</label>
+          <textarea cols="40" rows="30" name="textarea" id="textarea"></textarea>
+        </div>
+
+        <input id="addPhoto" type="button" value="사진 찾기">
+
+        <div>
+          <button type='submit' data-role='button' 
+           onclick="location.href='mobile_photo01.html'" 
+           data-icon='plus' data-iconpos="right">등록</button>
+        </div>
+      </form>
+    </div>
+    <div data-role="footer" data-theme="b" data-position="fixed">
+      <div data-role="navbar">
+        <ul>
+          <li><a href='mobile_qna.html' data-icon="back">뒤로</a></li>
+          <li><a href='#' onclick='location.href="../index.html"' data-icon="home">메인</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <script src="../js/jquery-1.11.1.js"></script>
+  <script src="../js/jquery.mobile-1.4.2.min.js"></script>
+</body>
+</html>
+<!-- http://localhost:8080/TestApp/qna/mobile_qna_write.html  -->

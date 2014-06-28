@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- SubjectMapper.xml -->
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<!-- DAO 인터페이스만 선언하고, 구현체를 자동 생성되게 하려면
+네임스페이스 이름을 인터페이스 이름과 같게 한다.
+SQL 아이디 값을 인터페이스의 메서드 이름과 같게 한다.
+ -->  
+<mapper namespace="migh.dao.NoticesDao">
+ 
+  <resultMap type="migh.vo.NoticesVo" id="noticesMap">
+    <id column="Not_Idx" property="no"/><!-- PK 컬럼에 대해서만 설정한다. -->
+    <result column="Not_Title" property="title"/>
+    <result column="Not_Content" property="content"/>
+    <result column="Not_Hit" property="hit"/>
+    <result column="Not_CrDate" property="datetime"/>
+  </resultMap> 
+  
+   <select id="list" resultMap="noticesMap" parameterType="map">
+    select Not_Title, Not_Content, Not_Hit, Not_CrDate
+    from Notices
+    order by Not_Idx desc
+    limit #{startIndex}, #{pageSize}
+  </select>
+  
+  <select id="count" resultType="int" parameterType="int">
+    select count(*) FROM Notices
+  </select>
+   
+  <insert id="insert" parameterType="noticesVo"
+      useGeneratedKeys="true" keyColumn="Not_Idx" keyProperty="no">
+    insert into Notices 
+          (Not_Title, Not_Content)
+    values (#{title}, #{content})                 
+  </insert>
+  
+    <select id="detail" parameterType="int" resultMap="noticesMap">
+    select Not_Title, Not_Content, Not_Hit, Not_CrDate
+    where Not_Title=#{title}
+  </select>
+  
+    <update id="update" parameterType="noticesVo">
+    update Notices set
+     Not_Title=#{title}, Not_Content=#{cotent}, Not_Hit=#{hit} 
+    where Not_Title=#{title}
+  </update>
+    
+  	<delete id="delete" parameterType="int">
+    delete from Notices
+    where Not_Title=#{title}
+ 	</delete>
+  
+</mapper>

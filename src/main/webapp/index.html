@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport"
+  content="width=device-width, height=device-height, 
+  initial-scale=1.0,minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"
+  charset="utf-8">
+<title>Main Page</title>
+<link rel="stylesheet" href="css/jquery.mobile-1.4.2.min.css" />
+<link rel="stylesheet" href="css/common.css">
+</head>
+<body>
+  <div data-role="page" id="main-page" class='bg'>
+   
+   <div data-role="header" data-theme='b' class="header-bar">
+      <span id="loginUsername" class="header-middle left-mg-01"></span>
+        <a href="#" data-role="button" data-icon="delete" class="ui-btn-right"
+         data-iconpos="left" onclick="logOut()"> 로그아웃
+        </a>
+    </div>
+   
+      <div data-role="content" class="center">
+       <img src="auth/logo.png" width="150">
+      <div class="ui-grid-b top-mg-icon">
+        <div class="ui-block-a">
+          <button id='room_icon' class='icon' data-role="none"
+           onclick="location.href='rsv/mobile_rsv.html'"></button>
+          <div class='icon-label'>예약</div>
+        </div>
+        
+        <div class="ui-block-b">
+          <button id='rsv_icon' class='icon' data-role="none"
+           onclick="location.href='notice/mobile_notice.html'"></button>
+          <div class='icon-label'>공지</div>
+        </div>
+        
+        <div class="ui-block-c">
+          <button id='qna_icon' class='icon' data-role="none"
+           onclick="location.href='qna/mobile_qna.html'"></button>
+          <div class='icon-label'>질문하기</div>
+        </div>
+      </div>
+
+      <div class="ui-grid-b top-mg-icon">
+        <div class="ui-block-a">
+          <button id='photo_icon' class='icon' data-role="none"
+           onclick="location.href='photo/mobile_photo01.html'"></button>
+          <div class='icon-label'>포토앨범</div>
+        </div>
+
+        <div class="ui-block-b">
+          <button id='faq_icon' class='icon' data-role="none"
+           onclick="location.href='faq/mobile_faq.html'"></button>
+          <div class='icon-label'>FAQ</div>
+        </div>
+
+        <div class="ui-block-c">
+          <button id='map_icon' class='icon' data-role="none"
+           onclick="location.href='map/mobile_map.html'"></button>
+          <div class='icon-label'>위치찾기</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/jquery-1.11.1.js"></script>
+  <script src="js/jquery.mobile-1.4.2.min.js"></script>
+  <script src="js/common.js"></script>
+  <script src="header.js"></script>
+  <script>
+    $('div [data-role=header]').trigger('create');
+  </script>
+</body>
+</html>

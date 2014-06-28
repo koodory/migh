@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Q & A</title>
+<meta name="viewport"
+  content="width=device-width, height=device-height, 
+  initial-scale=1.0,minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"
+  charset="utf-8">
+<link rel="stylesheet" href="../css/jquery.mobile-1.4.2.min.css" />
+<link rel="stylesheet" href="../css/bootstrap.min.css">
+<link rel="stylesheet" href="../css/bootstrap-theme.min.css">
+<link rel="stylesheet" href="../css/common.css">
+</head>
+<body>
+  <div data-role="page" id="qna-page">
+
+    <div data-role='header' data-theme='b' data-position="inline" class="header-bar">
+      <a href="#" data-icon="arrow-l" data-role="button" class="header-middle"
+        onclick="location.href='../index.html'">뒤로가기</a>
+      <h1>Q & A</h1>
+    </div>
+
+    <div data-role='content' class="center" id='contentBox'>
+      <h1>질문 게시판</h1>
+       
+      <div id ="navbar">
+        <button type='button' onclick='location.href="mobile_qna_write.html"' 
+          id="addBtn" data-role="none" class="btn btn-block btn-lg btn-primary btn_space"
+          style= "width: 100%;">
+          질문 등록</button>
+        <button type='button' data-role="none" id="allBtn"
+          class='btn btn-block btn-lg btn-primary btn_space hideBtn'>전체글</button>
+        <button type='button' data-role="none" id="adminBtn"
+           class='btn btn-block btn-lg btn-primary btn_space hideBtn'>대기글</button>     
+       </div> 
+    </div>
+  </div>
+  
+  <script src="../js/jquery-1.11.1.js"></script>
+  <script src="../js/jquery.mobile-1.4.2.min.js"></script>
+  <script src="../js/common.js"></script>
+  <script src="mobile_qna.js"></script>
+</body>
+</html>

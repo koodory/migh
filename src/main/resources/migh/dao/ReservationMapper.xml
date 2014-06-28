@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- SubjectMapper.xml -->
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<!-- DAO 인터페이스만 선언하고, 구현체를 자동 생성되게 하려면
+네임스페이스 이름을 인터페이스 이름과 같게 한다.
+SQL 아이디 값을 인터페이스의 메서드 이름과 같게 한다.
+ -->  
+<mapper namespace="migh.dao.ReservationDao">
+ 
+  <resultMap type="migh.vo.ReservationVo" id="rsvMap">
+    <id column="Rsv_Idx" property="no"/><!-- PK 컬럼에 대해서만 설정한다. -->
+    <result column="Mem_Idx" property="memberNo"/> <!-- 예약자 -->
+    <result column="Rom_Idx" property="roomNo"/> <!-- 방번호 -->
+    <result column="Rsv_Num" property="headcount"/> <!-- 투숙인원 -->
+    <result column="Rsv_InDate" property="checkin"/> <!-- 입실날짜 -->
+    <result column="Rsv_OutDate" property="checkout"/> <!-- 퇴실날짜-->
+    <result column="Rsv_DefPrice" property="basicPrice"/> <!-- 기본료 -->
+    <result column="Rsv_RsvPrice" property="deposit"/> <!-- 예약금 -->
+    <result column="Rsv_DisPrice" property="discount"/> <!-- 할인액 -->
+    <result column="Rsv_PayYN" property="payStatus"/> <!-- 완납여부 -->
+    <result column="Rsv_YN" property="rsvStatus"/> <!-- 예약여부 -->
+    <result column="Rsv_Payback" property="refund"/> <!-- 환불금 -->
+    <result column="Mem_ID" property="id"/> <!-- 예약자 ID -->
+    <result column="Mem_Email" property="email"/> <!-- 예약자 이메일 -->
+    <result column="Rom_Name" property="roomName"/> <!-- 방이름 -->
+    <result column="Rom_Price1" property="offWdPrice"/> <!-- 비수기 주중가 -->
+    <result column="Rom_Price2" property="offWePrice"/> <!-- 비수기 주말가 -->
+    <result column="Rom_Price3" property="peakWdPrice"/> <!-- 성수기 주중가  -->
+    <result column="Rom_Price4" property="peakWePrice"/> <!-- 성수기 주말가 -->
+    <result column="Rsv_Date" property="date"/>
+  </resultMap> 
+
+   <select id="list" resultMap="rsvMap" parameterType="map">
+    SELECT B.*, M.Mem_ID, M.Mem_Email, R.Rom_Name,
+           R.Rom_Price1, R.Rom_Price2, R.Rom_Price3, R.Rom_Price4
+    from Reservations B, members M, Rooms R
+    WHERE B.Mem_Idx = M.Mem_Idx AND B.Rom_Idx = R.Rom_Idx
+    limit #{startIndex}, #{pageSize}
+  </select>
+  
+  <select id="count" resultType="int">
+    select COUNT(Rsv_Idx) AS count FROM Reservations
+  </select>  
+  
+  <insert id="insert" parameterType="reservationVo"
+    useGeneratedKeys="true" keyColumn="Rsv_Idx" keyProperty="no">
+    insert into Reservations
+          (Mem_Idx, Rom_Idx, Rsv_Num, Rsv_InDate, Rsv_OutDate, Rsv_DefPrice
+           Rsv_RsvPrice ,Rsv_DisPrice, Rsv_PayYN, Rsv_YN, Rsv_Payback)
+    values (#{memberNo}, #{roomNo}, #{headcount}, #{checkin}, #{checkout},
+            #{basicPrice}, #{deposit}, #{discount}, #{payStatus}, #{rsvStatus}
+            #{refund})                 
+  </insert>
+  
+   <update id="update" parameterType="reservationVo">
+    update Reservations set
+     Rsv_Idx=#{no}, Mem_Idx=#{memberNo}, Rom_Idx=#{roomNo}, 
+     Rsv_Num=#{headcount}, Rsv_InDate=#{checkin}, Rsv_OutDate=#{checkout}, 
+     Rsv_DefPrice=#{basicPrice}, Rsv_RsvPrice=#{deposit}, Rsv_DisPrice=#{discount},
+     Rsv_PayYn=#{payStatus}, Rsv_YN=#{rsvStatus}, Rsv_PayBack=#{refund}
+    where Rsv_Idx=#{no} AND Mem_Idx=#{memberNo} AND Rom=Idx{roomNo}
+  </update>
+    
+  <delete id="delete" parameterType="reservationVo">
+    delete from Reservations
+    where Rsv_Idx=#{no} AND Mem_Idx=#{memberNo} AND Rom=Idx{roomNo}
+  </delete>
+  
+</mapper>

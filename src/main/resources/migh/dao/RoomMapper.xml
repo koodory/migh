@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- SubjectMapper.xml -->
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<!-- DAO 인터페이스만 선언하고, 구현체를 자동 생성되게 하려면
+네임스페이스 이름을 인터페이스 이름과 같게 한다.
+SQL 아이디 값을 인터페이스의 메서드 이름과 같게 한다.
+ -->  
+<mapper namespace="migh.dao.RoomDao">
+ 
+  <resultMap type="migh.vo.RoomVo" id="roomMap">
+    <id column="Rom_Idx" property="no"/><!-- PK 컬럼에 대해서만 설정한다. -->
+    <result column="Rom_Name" property="name"/> <!-- 객실이름 -->
+    <result column="Rom_Num" property="number"/> <!-- 객실번호 -->
+    <result column="Rom_Size" property="size"/> <!-- 객실사이즈 -->
+    <result column="Rom_Square" property="square"/> <!-- 평형 -->
+    <result column="Rom_MaxNo" property="accomodate"/> <!--  수용인원 -->
+    <result column="Rom_Content" property="detail"/> <!-- 상세내용 -->
+    <result column="Rom_Price1" property="offWdPrice"/> <!--  비수기 주중가격 -->
+    <result column="Rom_Price2" property="offWePrice"/> <!--  비수기 주말가격 -->
+    <result column="Rom_Price3" property="peakWdPrice"/> <!--  성수기 주중가격 -->
+    <result column="Rom_Price4" property="peakWePrice"/> <!--  성수기 주말가격 -->
+    <result column="RoomPic_Idx" property="picNo"/> <!-- 사진번호 -->
+    <result column="Rom_Pic1" property="picPath"/> <!-- 사진경로 -->
+  </resultMap> 
+  
+  <resultMap type="migh.vo.RoomPicVo" id="picMap">
+   <id column="RoomPic_Idx" property="no"/><!-- PK 컬럼에 대해서만 설정한다. -->
+   <result column="Rom_Pic1" property="picPath"/>
+   <result column="Rom_Idx" property="RoomNo"/>
+  </resultMap>
+  
+  <select id="list" resultMap="roomMap">
+    select * from Rooms R left join RoomPics P
+    on R.Rom_Idx = P.Rom_Idx
+  </select>
+    
+  <select id="count" resultType="int">
+    select COUNT(Rom_Idx) AS count FROM Rooms
+  </select>
+  
+  <select id="photoCount" resultType="migh.vo.RoomCountVo">
+    select Rom_Idx as no, COUNT(Rom_Idx) As count From RoomPics
+    where Rom_Idx group by Rom_Idx
+  </select>
+  
+  <insert id="upload" parameterType="map"
+    useGeneratedKeys="true" keyColumn="RoomPic_Idx" keyProperty="no">
+    insert into RoomPics 
+          (Rom_Pic1, Rom_Idx)
+    values (#{picPath}, #{roomNo})                 
+  </insert>
+</mapper>

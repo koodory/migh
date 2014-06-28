@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+<div class="wrdLatest" id=9>content</div> 
+<div class="wrdLatest" id=8>content</div> 
+
+<script>
+function lastPostFunc() 
+{ 
+    $('div#lastPostsLoader').html('<img src="bigLoader.gif">'); 
+    $.post("scroll.asp?action=getLastPosts&lastID=" + $(".wrdLatest:last").attr("id"),    
+
+
+    function(data){ 
+        if (data != "") { 
+        $(".wrdLatest:last").after(data);            
+        } 
+        $('div#lastPostsLoader').empty(); 
+    }); 
+}; 
+
+$(window).scroll(function(){ 
+        if  ($(window).scrollTop() == $(document).height() - $(window).height()){ 
+          lastPostFunc(); 
+        } 
+});
+</script>
+</body>
+</html>

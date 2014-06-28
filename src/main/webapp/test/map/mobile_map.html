@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport"
+  content="width=device-width, height=device-height, 
+  initial-scale=1.0,minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"
+  charset="utf-8">
+<title>Insert title here</title>
+<link rel="stylesheet" href="../css/jquery.mobile-1.4.2.min.css" />
+<link rel="stylesheet" href="../css/common.css">
+<link rel="stylesheet" href="../css/common_euihyun.css">
+<style>
+html,body {
+  height: 100%;
+  margin: 0px;
+  padding: 0px
+}
+
+#map-canvas {
+  margin: 0px;
+  padding: 0px;
+  height: 300px;
+  width: 100%;
+}
+
+#panel,#control {
+  top: 5px;
+  padding: 5px;
+  font-size: 14px;
+  z-index: 10;
+}
+
+#directions-panel {
+  height: 100%;
+  float: right;
+  width: auto;
+  overflow: auto;
+}
+
+#move {
+  position: relative;
+  float: left;
+}
+
+@media print {
+  #directions-panel {
+    width: auto;
+  }
+}
+</style>
+</head>
+
+<body>
+  <div data-role="page" id="map-page">
+
+    <div data-role="content">
+      <div id="map-canvas"></div>
+
+      <div id="panel">
+      <strong>교통수단: </strong>
+        <select id="mode" onchange="calcRoute();">
+          <option value="DRIVING">자가용</option>
+          <option value="WALKING">도보</option>
+          <option value="TRANSIT">대중교통</option>
+        </select>
+      </div>
+
+      <div id="control">
+        <strong>출발지: </strong> 
+        <select id="start" onchange="calcRoute();">
+          <option value="pos">현위치</option>
+          <option value="seoul, kr">서울</option>
+          <option value="busan, kr">부산</option>
+
+        </select>
+      </div>
+
+
+      <div id="directions-panel"></div>
+    </div>
+
+    <div data-role="footer" data-theme="b" data-position="fixed">
+      <div data-role="navbar">
+        <ul>
+          <li><a href='../index.html' data-icon="arrow-l">뒤로</a></li>
+          <li><a href='../index.html' data-icon="home">메인</a></li>
+          <li><a href='../mobile_qna.html' data-icon="arrow-r">다음</a></li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+  <script src="../js/jquery-1.11.1.js"></script>
+  <script src="../js/jquery.mobile-1.4.2.min.js"></script>
+  <script type="text/javascript" src="../platform/js/libs/cordova.js"></script>
+  <script type="text/javascript"
+    src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=true&region=kr">
+      
+    </script>
+  <script src="map.js"></script>
+</body>
+</html>

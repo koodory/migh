@@ -1,0 +1,38 @@
+<!DOCTYPE html> 
+<html>
+<head>
+	<title>Page Title</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1" user-scalable="no">
+	<link rel="stylesheet" href="../css/jquery.mobile-1.4.2.min.css" />
+</head>
+<style>
+*{
+	border: 1px solid red;
+}
+</style>
+<body>
+<div data-role="page" id='first-page'>
+	<div data-role='header' data-theme='b'>
+		<h1>Mobile</h1>
+	</div>
+	<div data-role='content'>
+		<ul data-role='listview'>
+			<li><a href='#second-page'>List Item1</a></li>
+			<li><a href='#second-page'>List Item2</a></li>
+			<li><a href='#second-page'>List Item3</a></li>
+			<li><a href='#second-page'>List Item4</a></li>
+		</ul>
+	</div>	
+</div>
+<div data-role="page" id='second-page'>
+	<div data-role='header' data-add-back-btn='true'>
+		<h1>Other page</h1>
+	</div>
+	<div data-role='content'>
+		<p>Lorem ipsum dolor sit amet</p>
+	</div>
+</div>
+<script src="..js/jquery.mobile-1.4.2.js"/>
+<script src="..js/jquery-1.11.1.min.js"/>
+</body>
+</html>

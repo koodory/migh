@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Q & A</title>
+<meta name="viewport"
+	content="width=device-width, height=device-height, 
+  initial-scale=1.0,minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"
+	charset="utf-8">
+<link rel="stylesheet" href="../css/jquery.mobile-1.4.2.min.css" />
+<link rel="stylesheet" href="../css/common.css">
+<link rel="stylesheet" href="../css/common_euihyun.css">
+
+</head>
+
+<body>
+	<div data-role="page">
+		<div data-role='header' data-theme='b' data-add-back-btn='true'
+			class="center">
+			<h1>Q & A</h1>
+		</div>
+
+		<div data-role='content' class="center">
+			<h1 id='leveltype'></h1>
+			<div class='left bold' id ='name'>
+			</div>
+			<div data-role="fieldcontain">
+				<label for="title" class="left title">제목:</label> <input id="title"
+					class="title" type="text" name="title" />
+			</div>
+			<div data-role="fieldcontain">
+				<label for="textarea" class="left">내용:</label>
+				<textarea cols="40" rows="30" name="textarea" id="textarea"></textarea>
+			</div>
+			<div>
+				<div class="ui-grid-a">
+					<div class="ui-block-a">
+						<a id='btnRegist' href='#' data-role='button' data-icon='plus'
+							data-iconpos="right">등록</a>
+					</div>
+					<div class="ui-block-b">
+						<a id='btnCancel' href='#'
+							onclick='location.href="mobile_qna.html"' data-role='button'
+							data-icon='delete' data-iconpos="right">취소</a>
+					</div>
+				</div>
+				<div id='alarm'></div>
+			</div>
+		</div>
+		<div data-role="footer" data-theme="b" data-position="fixed">
+			<div data-role="navbar">
+				<ul>
+					<li><a href='#' onclick="location.href='mobile_qna.html'"
+						data-icon="back">뒤로</a></li>
+					<li><a href='#' onclick='location.href="../index.html"'
+						data-icon="home">메인</a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+	<script src="../js/jquery-1.11.1.js"></script>
+	<script src="../js/jquery.mobile-1.4.2.min.js"></script>
+	<script src="../js/common.js"></script>
+	<script src="mobile_qna_write.js"></script>
+</body>
+</html>

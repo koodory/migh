@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Q & A</title>
+<meta name="viewport"
+  content="width=device-width, height=device-height, 
+  initial-scale=1.0,minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"
+  charset="utf-8">
+<link rel="stylesheet" href="../css/jquery.mobile-1.4.2.min.css" />
+<link rel="stylesheet" href="../css/bootstrap.min.css">
+<link rel="stylesheet" href="../css/bootstrap-theme.min.css">
+<link rel="stylesheet" href="../css/common.css">
+</head>
+<body>
+  <div data-role="page" id="qna-page">
+
+    <div data-role='header' data-theme='b' data-position="inline" class="header-bar">
+      <a href="#" data-icon="arrow-l" data-role="button" class="header-middle"
+        onclick="location.href='../index.html'">뒤로가기</a>
+      <h1>Q & A</h1>
+    </div>
+
+    <div data-role='content' class="center" id='contentBox'>
+      <h1>질문 게시판</h1>
+      
+      <div class='ui-grid-a' id ="navbar">
+        <div class='ui-block-a'>
+          <button type='button' onclick='location.href="mobile_qna_write.html"' 
+            id="addBtn" data-role="none" class="btn btn-block btn-lg btn-primary btn_space">
+            질문 등록</button>
+        </div>
+        
+        <div class='ui-block-b'>
+          <button type='button' data-role="none" id="myBtn"
+            class='btn btn-block btn-lg btn-primary btn_space'>내가 쓴글</button>
+        </div>
+        
+        <div class='ui-block-b'>
+          <button type='button' data-role="none" id="allBtn"
+            class='btn btn-block btn-lg btn-primary btn_space hideBtn'>전체글</button>
+        </div>
+        
+        <div class='ui-block-b'>
+          <button type='button' data-role="none" id="adminBtn"
+            class='btn btn-block btn-lg btn-primary btn_space hideBtn'>대기글</button>
+        </div>
+        
+<!--        <div data-role="popup" id="popupBasic"> -->
+<!--          <div data-role="header" data-theme="b">경고</div> -->
+<!--          <p>삭제 하시겠습니까?</p> -->
+<!--          <a id="confirm" href="#" data-role="button" data-inline="true" -->
+<!--           data-rel="back" data-corners="true" > -->
+<!--           <span>확인</span></a> -->
+<!--          <a id="cancel" href="#" data-role="button" data-inline="true" -->
+<!--           data-rel="back" data-corners="true" onclick=""><span>취소</span></a> -->
+<!--       </div> -->
+        
+      </div>
+    </div>   
+  </div>
+  
+  <script src="../js/jquery-1.11.1.js"></script>
+  <script src="../js/jquery.mobile-1.4.2.min.js"></script>
+  <script src="../js/common.js"></script>
+  <script src="mobile_qna.js"></script>
+</body>
+</html>

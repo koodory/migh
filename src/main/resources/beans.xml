@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:c="http://www.springframework.org/schema/c" 
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:jee="http://www.springframework.org/schema/jee"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="
+        http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/jee
+        http://www.springframework.org/schema/jee/spring-jee.xsd
+        http://www.springframework.org/schema/tx
+        http://www.springframework.org/schema/tx/spring-tx.xsd">
+
+	<context:component-scan base-package="migh">
+		<context:exclude-filter type="regex"
+			expression="migh.controls.*" />
+	</context:component-scan>
+
+	<jee:jndi-lookup id="dataSource" jndi-name="java:comp/env/jdbc/migh" />
+
+	<!-- mybatis의 SqlSessionFactory 객체를 생성 -->
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+		<property name="typeAliasesPackage" value="migh.vo" />
+		<property name="mapperLocations" value="classpath*:migh/dao/*Mapper.xml" />
+	</bean>
+
+	<!-- DAO 구현체 자동 생성 
+	=> basePackage : DAO 인터페이스가 정의된 패키지를 설정
+	=> DAO 구현체를 자동 생성하려면 SQL 맵퍼 파일의 네임스페이스를 
+	   DAO 인터페이스 이름과 같게 해야 한다.
+	=> SQL 맵퍼 파일에서 SQL 아이디의 값은 
+	   DAO 인터페이스의 메서드 이름과 같게 해야 한다. 
+	-->
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<property name="basePackage" value="migh.dao" />
+	</bean>
+
+	<!-- 스프링 트랜잭션 설정 -->
+	<bean id="txManager"
+		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+
+  <!-- @Transactional 등 트랜잭션 관련 애노테이션을 처리하는 역할자를 
+        자동 등록한다.ringframework.context.annotation.ConfigurationClassPostProcessor.importAwareProcessor
+org.springframework.context.annotation.ConfigurationClassPostP
+        transaction-manager 속성의 기본 값은 "transactionManager"이다.
+        따라서, 트랜잭션 관리자 객체의 이름이 다르다면 이 속성에 정확하게
+        이름을 명시해야 한다.
+  -->
+  <tx:annotation-driven transaction-manager="txManager"/>
+</beans>
+

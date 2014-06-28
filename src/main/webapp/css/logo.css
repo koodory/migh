@@ -1,0 +1,8 @@
+@CHARSET "UTF-8";
+.logoStyle{ font-style: normal; font-size: 2em; color: gray;}
+#tanger{ font-family: 'Tangerine'; float: left; margin-top: 0px; color: Brown;
+ font-weight: 200; font-size: 2em;}
+#Anton{ font-family: 'Anton'; float:left; margin-top: 15px; margin-left: -100px;}
+#OpenSan{ font-family: 'Open+Sans+Condensed:300'; overflow: hidden; float: left;
+  margin-top: 22px; margin-left: px;}
+#HennyPenny{font-family: 'HennyPenny', cursive; }
