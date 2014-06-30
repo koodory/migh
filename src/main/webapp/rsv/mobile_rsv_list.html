@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport"
+  content="user-scalable=no, initial-scale=1.0, maximum-scale=1.0,
+  minimum-scale=1.0, width=device-width, height=device-height"
+  charset="utf-8">
+<title>Insert title here</title>
+<link rel="stylesheet" href="../css/bootstrap.min.css">
+<link rel="stylesheet" href="../css/bootstrap-theme.min.css">
+<link rel="stylesheet" href="../css/jquery.mobile-1.4.2.min.css" />
+<link rel="stylesheet" href="../css/slider.css">
+<link rel="stylesheet" href="../css/common.css">
+<link rel="stylesheet" type="text/css"
+  href="datepicker/jquery.mobile.datepicker.css">
+<link rel="stylesheet" type="text/css"
+  href="datepicker/jquery.mobile.datepicker.theme.css">
+</head>
+<body>
+    <!-- 예약 리스트 -->
+
+    <div data-role="page" id="rsv-list-page">
+
+      <div data-role="header" data-theme='b' data-add-back-btn='true'></div>
+
+      <div data-role="content" class="center">
+        <div>예약리스트</div>
+        <div class="right">
+          <div>예약 번호</div>
+          <div class="center">예약자</div>
+          <div>예약일</div>
+        </div>
+        <table class="center room-table">
+          <tr>
+            <td>1</td>
+            <td>1</td>
+          </tr>
+          <tr>
+            <td>2</td>
+            <td>2</td>
+          </tr>
+          <tr>
+            <td>3</td>
+            <td>3</td>
+          </tr>
+          <tr>
+            <td>4</td>
+            <td>4</td>
+          </tr>
+          <tr>
+            <td>5</td>
+            <td>5</td>
+          </tr>
+          <tr>
+            <td>6</td>
+            <td>6</td>
+          </tr>
+          <tr>
+            <td>7</td>
+            <td>7</td>
+          </tr>
+        </table>
+      </div>
+      <button type='button' onclick='location.href="#rsv-confirm"'
+        data-role="none" class="btn btn-block btn-lg btn-primary btn_space"
+        style="width: 95%;">예약변경</button>
+
+      <div data-role="footer" data-theme="b" data-position="fixed">
+        <div data-role="navbar">
+          <ul>
+            <li><a href='#' data-icon="arrow-l" id="prev"
+              data-transition="slide" data-direction="reverse">이전</a></li>
+            <li><a href='#' onclick='location.href="../index.html"'
+              data-icon="home" data-transition="slide" data-direction="reverse">메인</a></li>
+            <li><a href='#' data-icon="arrow-r" id="next"
+              data-transition="slide">다음</a></li>
+          </ul>
+        </div>
+      </div>
+          <script src="../js/jquery-1.11.1.js"></script>
+    <script src="../js/jquery.mobile-1.4.2.min.js"></script>
+    <script src="../js/common.js"></script>
+    <script src="datepicker/jquery.mobile.datepicker.js"></script>
+    <script src="datepicker/external/jquery-ui/datepicker.js"></script>
+    <script src="../js/slider.js"></script>
+    <script src="../js/date.js"></script>
+    <script src="rsv.js"></script>
+</body>
+</html>

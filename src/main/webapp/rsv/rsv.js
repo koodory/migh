@@ -546,7 +546,7 @@ function addList(){
 		},
 		success: function(jsonObj){
 			var result = jsonObj.ajaxResult;
-			location.href  = contextPath + "/qna/mobile_qna.html";
+			location.href  = "#rsv-page";
 		},
 		error: function(xhr, ajaxOptions, thrownError){
 			alert("통신 장애");
@@ -554,4 +554,10 @@ function addList(){
 			console.log(thrownError);
 		}
 	});
+}
+
+/* 예약 확인 페이지*/
+
+function rsvList(){
+	location.href = 'mobile_rsv.html';
 }
