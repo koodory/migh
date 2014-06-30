@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- SubjectMapper.xml -->
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<!-- DAO 인터페이스만 선언하고, 구현체를 자동 생성되게 하려면
+네임스페이스 이름을 인터페이스 이름과 같게 한다.
+SQL 아이디 값을 인터페이스의 메서드 이름과 같게 한다.
+ -->  
+<mapper namespace="migh.dao.PhotosDao">
+ 
+  <resultMap type="migh.vo.PhotosVo" id="photosMap">
+    <id column="Pho_Idx" property="photosNo"/>
+    <result column="Mem_Idx" property="memberNo"/>
+    <result column="Pho_Title" property="photosTitle"/>
+    <result column="Pho_Content" property="photosContent"/>
+    <result column="Pho_Img" property="photosImg"/>
+    <result column="Pho_Hit" property="photosHit"/>
+    <result column="Pho_CrDate" property="photosCrDate"/>
+    <result column="Mem_ID" property="memberId"/>
+  </resultMap> 
+
+   <select id="list" resultMap="photosMap" parameterType="map">
+    select Pho_Idx, P.Mem_Idx, Pho_Title, Pho_Content, Pho_Img, Pho_Hit, Pho_CrDate, 
+           Mem_ID 
+    from photos P join members M
+    on P.Mem_Idx=M.Mem_Idx
+    order by Pho_Idx desc
+    limit #{startIndex}, #{pageSize}
+  </select>
+  
+  <select id="count" resultType="int">
+    select COUNT(Pho_Idx) AS count FROM Photos
+  </select>  
+  
+  <insert id="insert" parameterType="photosVo"
+    useGeneratedKeys="true" keyColumn="Pho_Idx" keyProperty="no">
+    insert into Photos 
+          (Mem_Idx, Pho_Title, Pho_Content, Pho_Img)
+    values (#{memberNo}, #{photosTitle}, #{photosContent}, #{photosImg})                 
+  </insert>
+  
+   <update id="update" parameterType="photosVo">
+    update Photos set
+     Pho_Idx=#{photosNo}, Mem_Idx=#{memberNo}, Pho_Title=#{photosTitle}, 
+     Pho_Content=#{photosContent}, Pho_Img=#{photosImg}, Pho_Hit=#{photosHit}, 
+     Pho_CrDate=#{photosCrDate}
+    where Pho_Idx=#{photosNo}
+  </update>
+    
+  <delete id="delete" parameterType="photosVo">
+    delete from Photos
+    where Pho_Idx=#{photosNo}
+  </delete>
+  
+</mapper>

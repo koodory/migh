@@ -11,7 +11,7 @@ var rsv = {
   checkout: null, basicPrice: null, deposit: 0, discount: 0,
   payStatus: "N", rsvStatus: "N", refund: 0};
 var result, roomNo = 1, night;
-var count;
+var count, revIdx;
 var tomorrow = new Date.today().addDays(1).toString("yyyy-MM-dd");
 var todays = Date.today().toString("yyyy-MM-dd");
 var seasonStart = new Date(2014, 6, 1);
@@ -43,6 +43,18 @@ $(function(){
 		moveFoward();
 	});
 	
+	$("#checkinInput").focus(function(){
+	   confirmRSV();	
+	});
+	
+    $("#checkoutInput").focus(function(){
+ 	   confirmRSV();	
+    });
+
+    $(document).on("click","#cancel", function(){
+    	clearForm();
+    })
+    
 	$(window).trigger('resize');
 	
 	function touchCreate(){
@@ -58,9 +70,10 @@ $(function(){
 	function pageControl(roomNo){
 		var num=0, index=0, data, cnt=new Array();
 		$.each(result.data, function(index1,obj){		
-			$.each(obj, function(index2,data){
+			$.each(obj, function(index2,data){				
 				if(data.count){
-					cnt[index2] = data.count;
+				    if(index2 == 0) revIdx =  data.no - 1; 
+					cnt[index2] = data.count + revIdx;
 				}
 				if(data.no == roomNo){
 					showData(data, index2, cnt);
@@ -123,8 +136,8 @@ $(function(){
 	/* 오른쪽으로 이동*/
 	function moveFoward(){
 		roomNo++;
-		if (roomNo > count) {
-			roomNo = 1; pageControl(roomNo);
+		if (roomNo > count + revIdx) {
+			roomNo = 1 + revIdx; pageControl(roomNo);
 		}else{
 			pageControl(roomNo);
 		}
@@ -132,8 +145,8 @@ $(function(){
 	/* 왼쪽으로 이동*/
 	function moveBackward(){
 		roomNo--;
-		if (roomNo < 1) {
-			roomNo = count; pageControl(roomNo);
+		if (roomNo < 1 + revIDx) {
+			roomNo = count + revIdx; pageControl(roomNo);
 		}else{
 			pageControl(roomNo);
 		}
@@ -248,6 +261,8 @@ var getAllDays = function () {
     		rsv.checkin = checkin;
     		rsv.checkout = checkout;
     		confirmRSV();
+    	}else{
+    		clearForm();
     	}
     });
      /* 기본 숙박비 계산(시즌,주말) */
@@ -329,6 +344,10 @@ var confirmRSV = function(){
 //	table.appendTo($("#showDetail"));
 }
 
+function clearForm(){
+	$("#showDetail").contents().remove();
+}
+
 var parseDate = function(date){
 	var value = {};
 	var dateArray = date.split("-");
@@ -361,7 +380,7 @@ var setDatePicker = function(element){
 		$(element).datepicker("setDate", $(element+"Input").val()); 
 	}
 }
-
+/* 팝업창*/
 function popup(idx, message) {
 	// text you get from Ajax  
 	var closeBtn = $("<a>").attr({"href":"#", "data-rel":"back"})

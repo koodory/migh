@@ -363,7 +363,6 @@ function pageCreate(data){ // data: Json, number: Id판별 인덱스(j값)
 		showData();
 	}
 	
-	
 	$(".text-title").contents().addClass('text-block'); 
 	$('div[data-role=content]').trigger('create'); // 화면갱신
 }

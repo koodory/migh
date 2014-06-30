@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>파일 업로드</title>
+</head>
+<body>
+<form action="photo/insert.ajax" method="post" enctype="multipart/form-data"
+ data-ajax="false">
+방번호: <input type="text" name="memberNo"><br>
+제목: <input type="text" name="photosTitle"><br>
+내용: <input type="text" name="photosContent"><br>
+파일명: <input type="file" name="photoFile"><br>
+<input type="submit" value="업로드">
+</form>
+</body>
+</html>
