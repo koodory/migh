@@ -1,7 +1,10 @@
 package migh.vo;
 
-public class RoomPicVo {
-  private int no; //사진번호
+import java.io.Serializable;
+
+public class RoomPicVo implements Serializable {
+  private static final long serialVersionUID = -6758752131927740617L;
+	private int no; //사진번호
   String picPath; //사진경로
   int roomNo; //방 번호
   

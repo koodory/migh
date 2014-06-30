@@ -3,9 +3,9 @@ package migh.vo;
 import java.io.Serializable;
 
 public class NoticesVo implements Serializable{
-	private static final long serialVersionUID = 1L;
-
-	int 	  no; // 공지사항 번호(자동생성)
+  private static final long serialVersionUID = -2927988633901365278L;
+	
+  int 	  no; // 공지사항 번호(자동생성)
 	String	title; // 공지사항 제목
 	String	content; //공지사항 내용
 	int	hit; // 공지사항 히트 수

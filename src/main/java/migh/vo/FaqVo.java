@@ -2,8 +2,8 @@ package migh.vo;
 
 import java.io.Serializable;
 
-@SuppressWarnings("serial")
 public class FaqVo implements Serializable{
+  private static final long serialVersionUID = 3613934025508826739L;
 //	private static final long serialVersionUID = 1L;
 
 	private int 	  no; // FAQ 번호(자동생성)

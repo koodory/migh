@@ -3,8 +3,8 @@ package migh.vo;
 import java.io.Serializable;
 
 public class QnaVo implements Serializable{
-	private static final long serialVersionUID = 1L;
-
+  private static final long serialVersionUID = 7192003580729050039L;
+  
 	int 	qnaNo; // Qna 번호(자동생성)
 	int 	memberNo; // Mem 번호
 	String	title; //Qna 제목

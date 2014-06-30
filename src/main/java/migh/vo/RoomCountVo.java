@@ -1,6 +1,9 @@
 package migh.vo;
 
-public class RoomCountVo {
+import java.io.Serializable;
+
+public class RoomCountVo implements Serializable {
+  private static final long serialVersionUID = 6115445788667704853L;
 	int no; //방번호
 	int count; //갯수
 	

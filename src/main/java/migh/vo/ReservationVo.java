@@ -1,7 +1,11 @@
 package migh.vo;
 
-public class ReservationVo {
-  private int no; //번호
+import java.io.Serializable;
+
+public class ReservationVo implements Serializable{
+  private static final long serialVersionUID = 2002735441588660767L;
+  
+	private int no; //번호
   private int memberNo; //예약자
   private int roomNo; //방번호
   private int headcount; //투숙인원
@@ -14,13 +18,6 @@ public class ReservationVo {
   private char payStatus; //완납여부
   private char rsvStatus; //예약여부
   private char refund; //환불금  
-  private String id; //예약자 ID
-  private String email; //예약자 이메일
-  private String roomName; //객실명
-  private int offWdPrice; //비수기 주중 가격
-  private int offWePrice; //비수기 주말 가격
-  private int peakWdPrice; //성수기 주중 가격
-  private int peakWePrice; //성수기 주말 가격
   
 	public int getNo() {
 		return no;
@@ -111,55 +108,6 @@ public class ReservationVo {
 	}
 	public ReservationVo setRefund(char refund) {
 		this.refund = refund;
-		return this;
-	}
-	public String getId() {
-		return id;
-	}
-	public ReservationVo setId(String id) {
-		this.id = id;
-		return this;
-	}
-	public String getEmail() {
-		return email;
-	}
-	public ReservationVo setEmail(String email) {
-		this.email = email;
-		return this;
-	}
-	public String getRoomName() {
-		return roomName;
-	}
-	public ReservationVo setRoomName(String roomName) {
-		this.roomName = roomName;
-		return this;
-	}
-	public int getOffWdPrice() {
-		return offWdPrice;
-	}
-	public ReservationVo setOffWdPrice(int offWdPrice) {
-		this.offWdPrice = offWdPrice;
-		return this;
-	}
-	public int getOffWePrice() {
-		return offWePrice;
-	}
-	public ReservationVo setOffWePrice(int offWePrice) {
-		this.offWePrice = offWePrice;
-		return this;
-	}
-	public int getPeakWdPrice() {
-		return peakWdPrice;
-	}
-	public ReservationVo setPeakWdPrice(int peakWdPrice) {
-		this.peakWdPrice = peakWdPrice;
-		return this;
-	}
-	public int getPeakWePrice() {
-		return peakWePrice;
-	}
-	public ReservationVo setPeakWePrice(int peakWePrice) {
-		this.peakWePrice = peakWePrice;
 		return this;
 	}
 }

@@ -3,9 +3,8 @@ package migh.vo;
 import java.io.Serializable;
 
 public class MembersVo implements Serializable{
-  private static final long serialVersionUID = 1L;
-
-  int 	  no; // 회원 번호(자동생성)
+  private static final long serialVersionUID = 1651702783499069254L;
+	int 	  no; // 회원 번호(자동생성)
   String 	id; // 회원 아이디(20)
   String  name; //회원 이름
   String 	password; // 회원 비밀번호(20)

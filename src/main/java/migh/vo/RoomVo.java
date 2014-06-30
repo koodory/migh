@@ -3,9 +3,8 @@ package migh.vo;
 import java.io.Serializable;
 
 public class RoomVo implements Serializable {
-	private static final long serialVersionUID = 1L;
-	
-  private int no; //방 번호
+  private static final long serialVersionUID = -978126313034446160L;
+	private int no; //방 번호
   private String name; //객실이름
   private int number;  //객실번호
   private int size; //객실 사이즈
