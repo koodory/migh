@@ -12,7 +12,7 @@ var userNo; // 사용자 관리번호
 var flag = true; // 메뉴 제어 변수 , true: 전체메뉴 , false: 대기글
 var pageFlag = false; //페이지 상태, 오류메세지 제어
 var count; //Q&A record 갯수 저장
-var cntIndex = 1; //페이지 세는 변수
+var cntIndex = 0; //페이지 세는 변수
 
 $(document).ready(function(){
 	getInfo(); 	/* 서버의 세션에서 사용자 정보 가져옴 */
@@ -123,16 +123,18 @@ function setUI(){
 	$(document).on("scrollstart",function(){
 		if($(document).height() > $(window).height())
 		{
-		  if($(window).scrollTop() == $(document).height() - $(window).height()){
-		    loadList(currPageNo+1, pageSize); //맨 하단으로 갈시 loadList를 1증가 시켜 실행
+		  if($(window).scrollTop() == $(document).height() - $(window).height()
+			&& cntIndex	!= 0 ){
+			console.log(cntIndex, count);
+		    loadList(currPageNo + 1, pageSize); //맨 하단으로 갈시 loadList를 1증가 시켜 실행
 		  } 
 		}
 	});
 	
     /* 전체보기 버튼 클릭시 */
 	$('#allBtn').click(function(event){ 
-		flag = true;
-		btnControl(); reset();
+		flag = true; 
+		btnControl(); reset(); 
 	});
     
 	/* 대기글 보기 버튼 클릭시 */
@@ -244,19 +246,29 @@ function btnControl(){
 }
 
 /* 10개 출력후 다음 출력을 위해서 로딩바 표시 및 제어 함수*/
-function loadingBar(rCount){
-		
-	if(userLv == "ADMIN" && cntIndex == count){ //더 출력할 컨텐츠가 있음을 아이콘으로 알려줌
+function loadingBar(){
+	
+	var frontBar = function(){
+	  $('.loader').remove();
+	  $('<button>').text('처음으로 가기').addClass('top-loader center')
+	  .attr("onclick","reset()").appendTo(content);  
+	  $('div[data-role=content]').trigger('create'); 
+	  cntIndex = (cntIndex >=  count) ? 0 : cntIndex;
+	}
+	
+	var infiniteIcon = function(){
 		$('.loader').remove();
-		$('<button>').text('처음으로 가기').addClass('top-loader center')
-		.attr("onclick","reset()").appendTo(content);  
-		$('div[data-role=content]').trigger('create'); 
-		cntIndex = (cntIndex <= 0) ? count : cntIndex;
-	}else if(cntIndex % 10 == 0 && cntIndex > 10){
 		$('<div>').addClass('loader center ui-nodisc-icon')
 		.append($('<a>').attr('href','#').addClass('ui-disabled')
 		.addClass(pageDownStr)).appendTo(content);
 		$('div[data-role=content]').trigger('create');  //refresh(부모에 할것)
+	}
+	
+	console.log(cntIndex, count);
+	if(userLv == "ADMIN" && cntIndex == count){ //처음으로 가기 
+		frontBar();
+	}else if(userLv == "ADMIN" && cntIndex >= 10){ //더 출력할 컨텐츠가 있음을 아이콘으로 알려줌
+		infiniteIcon();
 	}
 }
 
@@ -265,6 +277,7 @@ function reset(){
 	$('.dataRow').remove();
 	$('.top-loader').remove();
 	$('.loader').remove();
+	cntIndex = 0; //카운트 초기화
 	if(userLv == "ADMIN" && flag == true){ // 전체글 출력시
       loadList(1, pageSize);
     }else{
@@ -526,17 +539,15 @@ function loadList(pageNo, pageSize){
 			console.log(result);
 			var resultCount = result.data.list.length; //입력받은 data-set 개수 저장
 			if(result.status=='ok' && resultCount > 0){
-				if(pageNo != 1) loadingBar(resultCount); //맨 첫줄에 loadingBar생기는 것 방지
 				$('.errorMsg').remove(); //기존 오류메세지 다 삭제
 				$.each(result.data, function(index,obj){
 					$.each(obj, function(index,data){
+						cntIndex++;
 						pageCreate(data);
-						console.log(index,count);
-						++cntIndex;
 					});
 				});
 				currPageNo = pageNo;
-				loadingBar(resultCount);
+				loadingBar();
 			}else{
 				errorPage(1); //에러메세지 출력: 출력할 데이터 없음
 				console.log(result.status);
