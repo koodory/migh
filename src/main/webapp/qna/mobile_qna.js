@@ -12,7 +12,7 @@ var userNo; // 사용자 관리번호
 var flag = true; // 메뉴 제어 변수 , true: 전체메뉴 , false: 대기글
 var pageFlag = false; //페이지 상태, 오류메세지 제어
 var count; //Q&A record 갯수 저장
-var cntIndex = null; //페이지 세는 변수
+var cntIndex = 1; //페이지 세는 변수
 
 $(document).ready(function(){
 	getInfo(); 	/* 서버의 세션에서 사용자 정보 가져옴 */
@@ -123,9 +123,9 @@ function setUI(){
 	$(document).on("scrollstart",function(){
 		if($(document).height() > $(window).height())
 		{
-			if($(window).scrollTop() == $(document).height() - $(window).height()){
-				loadList(currPageNo+1,pageSize); //맨 하단으로 갈시 loadList를 1증가 시켜 실행
-			} 
+		  if($(window).scrollTop() == $(document).height() - $(window).height()){
+		    loadList(currPageNo+1, pageSize); //맨 하단으로 갈시 loadList를 1증가 시켜 실행
+		  } 
 		}
 	});
 	
@@ -244,19 +244,19 @@ function btnControl(){
 }
 
 /* 10개 출력후 다음 출력을 위해서 로딩바 표시 및 제어 함수*/
-function loadingBar(event, rCount){
-	cntIndex = count - rCount;
-	if(event ==0 && userLv == "ADMIN" && cntIndex >0){ //더 출력할 컨텐츠가 있음을 아이콘으로 알려줌
-		$('<div>').addClass('loader center ui-nodisc-icon')
-		.append($('<a>').attr('href','#').addClass('ui-disabled')
-		.addClass(pageDownStr)).appendTo(content);
-		$('div[data-role=content]').trigger('create');  //refresh(부모에 할것)  
-	}else if(event == 1){ //더 출력할 컨텐츠가 없을경우 처음로딩상태로 전환
+function loadingBar(rCount){
+		
+	if(userLv == "ADMIN" && cntIndex == count){ //더 출력할 컨텐츠가 있음을 아이콘으로 알려줌
 		$('.loader').remove();
 		$('<button>').text('처음으로 가기').addClass('top-loader center')
 		.attr("onclick","reset()").appendTo(content);  
 		$('div[data-role=content]').trigger('create'); 
 		cntIndex = (cntIndex <= 0) ? count : cntIndex;
+	}else if(cntIndex % 10 == 0 && cntIndex > 10){
+		$('<div>').addClass('loader center ui-nodisc-icon')
+		.append($('<a>').attr('href','#').addClass('ui-disabled')
+		.addClass(pageDownStr)).appendTo(content);
+		$('div[data-role=content]').trigger('create');  //refresh(부모에 할것)
 	}
 }
 
@@ -286,7 +286,7 @@ function pageCreate(data){ // data: Json, number: Id판별 인덱스(j값)
 	   answer = data.answer;
 	   mark = 'text-answer remove-shadow';
 	   str ='답변';
-    }
+   }
 	    
    var dataRow = $("<div>").addClass("dataRow").attr({
 		"data-role":"collapsible", 
@@ -305,7 +305,7 @@ function pageCreate(data){ // data: Json, number: Id판별 인덱스(j값)
    var info = function(img,id,time,hidden){
 	   return $('<div>').css('margin-top','10px')   
 	   .attr('data-role','fieldcontain bottom-mg-01')
-	   .append($('<img>').attr('src','people.png').addClass('id-icon'))
+	   .append($('<img>').attr('src',img).addClass('id-icon'))
 	   .append($('<span>').text(hidden).addClass('left').css('display','none'))
 	   .append($('<span>').text(id).addClass('float-left'))  
 	   .append($('<span>').text(time).addClass('float-right'));
@@ -323,7 +323,7 @@ function pageCreate(data){ // data: Json, number: Id판별 인덱스(j값)
     dataRow.append(answerTag).append(inTitle)
 	       .append(info('people.png',data.memberId, qTime, data.qna_No))
 	       .append(mainText('질문', data.question))
-	       .append(info('people.png', '관리자', aTime, null))
+	       .append(info('home.png', '관리자', aTime, null))
 	       .append(mainText('답변',answer)).appendTo(content);
 	uiCreate();
    }
@@ -331,15 +331,24 @@ function pageCreate(data){ // data: Json, number: Id판별 인덱스(j값)
 	/* 수정, 삭제 버튼 생성 */
    function uiCreate(){
 		var answer = data.answer;	
-		
+	
 		if(userLv == "ADMIN" &&  (answer == '답변 대기중입니다.' || 
 		   answer == ''|| answer  == null)){ 
 		   msg = "답변"; str = 'rspBtn';
-		}else{ 
-		   msg = "수정"; str = 'updateBtn'; 
+		   createBtn('b');
+		}else if(userLv == "NORMAL" && (answer == "답변 대기중입니다." ||
+	       answer == ''|| answer  == null)){ 
+		   msg = "수정"; str = 'updateBtn';
+		   createBtn('b');
+		}else if(userLv == "ADMIN"){ 
+		   msg = "수정"; str = 'rspBtn';
+		   createBtn('b');
+		}else{
+		   createBtn('a');
 		}
-		
-		var element = $('<div>').addClass('ui-grid-b');
+
+	  function createBtn(char){
+		var element = $('<div>').addClass('ui-grid-' + char);
 		
 		var btn = function(block, msg, str){
 		  return $('<div>').addClass('ui-block-' + block)
@@ -347,10 +356,17 @@ function pageCreate(data){ // data: Json, number: Id판별 인덱스(j값)
 		         .addClass(str).text(msg));
 		 }
 				
-		element.append(btn('a', msg, str))
-		       .append(btn('b', '삭제', 'deleteBtn').attr('data-transition','pop'))
-		       .append(btn('c', '취소', 'cancelBtn'))
-		       .appendTo(content.contents(":last")); 
+		if(char == 'a'){
+		  element
+		   .append(btn('a', '삭제', 'deleteBtn').attr('data-transition','pop'))
+		   .append(btn('b', '취소', 'cancelBtn')).appendTo(content.contents(":last"));
+			
+		}else{
+		 element.append(btn('a', msg, str))
+		   .append(btn('b', '삭제', 'deleteBtn').attr('data-transition','pop'))
+		   .append(btn('c', '취소', 'cancelBtn')).appendTo(content.contents(":last"));
+		}
+	  }
 	}
 	
 	/* 질문글 출력 제어*/
@@ -477,6 +493,7 @@ function getCount(pageNo){
 			var resultCount = result.data.list.length;
 			if(result.status=='ok' && resultCount > 0){
 				count = result.data.count; // 전체 record 개수 저장
+				console.log(count);
 				if(userLv == "NORMAL"){
 			      loadList(currPageNo, count);
 				}else{
@@ -509,20 +526,17 @@ function loadList(pageNo, pageSize){
 			console.log(result);
 			var resultCount = result.data.list.length; //입력받은 data-set 개수 저장
 			if(result.status=='ok' && resultCount > 0){
-				if(pageNo != 1) loadingBar(0, resultCount); //맨 첫줄에 loadingBar생기는 것 방지
+				if(pageNo != 1) loadingBar(resultCount); //맨 첫줄에 loadingBar생기는 것 방지
 				$('.errorMsg').remove(); //기존 오류메세지 다 삭제
 				$.each(result.data, function(index,obj){
 					$.each(obj, function(index,data){
 						pageCreate(data);
+						console.log(index,count);
+						++cntIndex;
 					});
 				});
 				currPageNo = pageNo;
-				if(resultCount >= 10){					
-					loadingBar(0, resultCount); //10개 이상 출력시 아이콘 알림 로딩바
-				}else{
-					loadingBar(1,resultCount); //더이상 출력 데이터 없을시 처음으로 가는 버튼 출력 
-					pageFlag = true; //loadingBar()제어용 flag 변수 
-				}
+				loadingBar(resultCount);
 			}else{
 				errorPage(1); //에러메세지 출력: 출력할 데이터 없음
 				console.log(result.status);

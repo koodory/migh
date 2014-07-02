@@ -1,6 +1,7 @@
 package migh.services;
 
 import java.util.List;
+import java.util.Map;
 
 import migh.vo.RoomCountVo;
 import migh.vo.RoomVo;

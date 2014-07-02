@@ -1,5 +1,6 @@
 package migh.dao;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -10,5 +11,6 @@ public interface ReservationDao {
 	void update(ReservationVo rsv) throws Throwable;
 	void delete(ReservationVo rsv) throws Throwable;
 	int count() throws Throwable;
-	List<ReservationVo> list(Map<String,Integer> params) throws Throwable;
+	List<ReservationVo> list(int memberNo) throws Throwable;
+	List<HashMap<String,String>> getDays(int roomNo) throws Throwable;
 }

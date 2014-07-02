@@ -1,6 +1,9 @@
 package migh.services;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import migh.vo.ReservationVo;
 
@@ -11,9 +14,9 @@ import migh.vo.ReservationVo;
  */
 public interface ReservationService {
 	int count();
-	List<ReservationVo> list(int pageNo, int pageSize);
+	List<ReservationVo> list(int memberNo);
 	void add(ReservationVo rsv);
 	void change(ReservationVo rsv);
 	void remove(ReservationVo rsv);
-	String[] getDiffDays(String fromDate, String toDate);
+	ArrayList<String> getDays(int roomNo);
 }
