@@ -28,19 +28,22 @@ public class ReservationControl {
 
 	@RequestMapping("/list")
 	public AjaxResult list(
-			@RequestParam(value="roomNo") int roomNo,
-			@RequestParam(value="memberNo") int memberNo) {
+			@RequestParam(value="memberNo") int memberNo,
+			@RequestParam(value="roomNo") int roomNo) {
 
 		HashMap<String,Object> params = new HashMap<String,Object>();
 		params.put("count", reservationService.count());
-    params.put("list",  reservationService.list(memberNo));
 		params.put("days", reservationService.getDays(roomNo));
+    
+    if(reservationService.list(memberNo) != null){
+      params.put("list",  reservationService.list(memberNo));
+    }
     
    return new AjaxResult()
 			.setStatus("ok")
 			.setData(params);
 	}
-	
+		
 	@RequestMapping(value="/insert", method=RequestMethod.POST)
 	public AjaxResult insert(ReservationVo vo) {		
 		reservationService.add(vo);

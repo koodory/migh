@@ -208,14 +208,14 @@ $(function(){
 	
 	$(document).on("click", ".confirm-date", function () {
 	  rsv.basicPrice = null;
-	  var label =$("div[data-role=popup]").contents(":eq(2)").prop("id");
+	  var label =$("div[data-role=popup]").contents(":eq(1)").prop("id");
 	  $("#"+label+"Input").val($("#"+label).val());
 	  
        getAllDays();
 	});
 
 	$(document).on("click",".cancel-date", function(){
-	  var label =$("div[data-role=popup]").contents(":eq(2)").prop("id");
+	  var label =$("div[data-role=popup]").contents(":eq(1)").prop("id");
 	  $("#"+label+"Input").val("");
     });
 
@@ -296,11 +296,7 @@ var objDate = function(date){ //Date 객체 생성 함수
 	   parseDate(date)[0], parseDate(date)[1]-1 , parseDate(date)[2]);
 }
 /* 예약사항 출력*/
-var confirmRSV = function(){
-    console.log(user);
-	console.log(rsv);
-	console.log(room);
-	
+var confirmRSV = function(){	
 	var checkin = $("#checkinInput").val();
 	var checkout = $("#checkoutInput").val();
 	var totCost = rsv.basicPrice - rsv.discount -rsv.deposit;
@@ -390,9 +386,9 @@ var setDatePicker = function(element){
 /* 팝업창*/
 function popup(idx, message) {
 	// text you get from Ajax  
-	var closeBtn = $("<a>").attr({"href":"#", "data-rel":"back"})
-	.addClass("ui-btn-right ui-btn ui-btn-b ui-corner-all " +
-	"ui-btn-icon-notext ui-icon-delete ui-shadow");
+//	var closeBtn = $("<a>").attr({"href":"#", "data-rel":"back"})
+//	.addClass("ui-btn-right ui-btn ui-btn-b ui-corner-all " +
+//	"ui-btn-icon-notext ui-icon-delete ui-shadow");
 
 	var title = $('<h3>').text(message).addClass("center");
 
@@ -421,7 +417,7 @@ function popup(idx, message) {
 		width: $(window).width() / 1.1 + "px",
 		padding: 3 + "px",
 		height: $(window).height() / 1.3  + "px"
-	}).append(closeBtn).append(title).append(content).append(btn);
+	}).append(title).append(content).append(btn);
 	// Append it to active page
 	$.mobile.pageContainer.append(popup).css("text-align","center");
 
@@ -582,23 +578,8 @@ function errorPage(number){
 }
 
 function reservationCotrol(rsvData){	
-   
-  $.each(rsvData.data, function(index, obj){
-      if(index == "days"){
-	     unAvailableDates = obj;
-	  }else if(index == "list"){
-		 console.log(obj[0]);
-	    $.each(obj, function(index, value){
-
-	    });
-	  }
-   });
 	
 	var rsvShow = function(){
-	    console.log(user);
-		console.log(rsv);
-		console.log(room);
-		
 		var checkin = $("#checkinInput").val();
 		var checkout = $("#checkoutInput").val();
 		var totCost = rsv.basicPrice - rsv.discount -rsv.deposit;
@@ -638,64 +619,55 @@ function reservationCotrol(rsvData){
 		            .append(tableData("미납금", totCost + "원"))
 		            .append(tableData("완납여부", payText))
 		    
-		$("#showDetail").contents().remove();
-		$("#showDetail").append(title).append(rsvDate).append(table);
+		$("#confirmBox").contents().remove();
+		$("#confirmBox").append(title).append(rsvDate).append(table);
 //		table.appendTo($("#showDetail"));
 	}
 	
+  /* RSV 및 Room 예약일 데이터 parsing*/
+  $.each(rsvData.data, function(index, obj){
+      if(index == "days"){
+	     unAvailableDates = obj;
+	  }else if(index == "list"){
+	    $.each(obj, function(index, value){
+	    	console.log(value);
+	        showConfirmData(value);
+	    });
+	  }
+   });
 	
 	/* 페이지 생성 함수*/
-	function showData(){ // data: Json, number: Id판별 인덱스(j값)
+	function showConfirmData(data){ // data: Json, number: Id판별 인덱스(j값)
 		
-		if(data.answer == null || data.answer == '답변 대기중입니다.' || 
-		   data.answer == ''){ //응답 내용이 없을 경우
-		   answer = '답변 대기중입니다.'; //응답내용
+		if(data.payStatus == "Y" || data.rsvStatus == "Y"){ //응답 내용이 없을 경우
 		   mark = 'text-no-answer'; //응답여부 표시 아이콘(CSS)
-		   str = '대기'; //아이콘에 들어갈 문자
+		   str = '예약완료'; //아이콘에 들어갈 문자
 		  }else{ // 그외 
-		   answer = data.answer;
 		   mark = 'text-answer remove-shadow';
-		   str ='답변';
+		   str ='예약대기';
 	   }
-		    
+		  
 	   var dataRow = $("<div>").addClass("dataRow").attr({
-			"data-role":"collapsible", 
+			"data-role":"collapsibleset", 
+			"data-theme":"a",
 			"data-iconpos" : "left", 
-			"data-inset" : "true",
+			"data-inset" : "false",
 			"data-collapsed-icon" : "carat-d", 
 			"data-expanded-icon" : "carat-u"
 		});
 		
-	   var answerTag = $('<h1>').text(data.title).addClass('text-title')
+	   var collapse = $("<div>").attr("data-role","collapsible");
+	   
+	   var title = $('<h2>').text(room.name).addClass('text-title')
 		   .append($('<div>' + str + '</div>').addClass(mark));
 
-	   var inTitle = $('<div>').attr('data-role','fieldcontain').addClass('left')
-		   .append($('<span>').html(data.title).addClass('left bold'));
-	   
-	   var info = function(img,id,time,hidden){
-		   return $('<div>').css('margin-top','10px')   
-		   .attr('data-role','fieldcontain bottom-mg-01')
-		   .append($('<img>').attr('src',img).addClass('id-icon'))
-		   .append($('<span>').text(hidden).addClass('left').css('display','none'))
-		   .append($('<span>').text(id).addClass('float-left'))  
-		   .append($('<span>').text(time).addClass('float-right'));
-	   }
-	      
-	   var mainText = function(subTitle, msg){
-		   return $('<div>').attr('data-role','fieldcontain')
-		    .addClass('left').append($('<div>').css('height','30px')
-		    .text('[ '+ subTitle +' 내용 ]').addClass('bold bottom-mg-01'))
-			.append($('<span>').html(msg).addClass('left'));
-	   }
+	   var contents = $('<ul>').attr("data-role","listview")
+	       .append($("<li>").text("테스트"));
 	   
 	   /* element 생성하여 데이터 화면표시*/
 	   function showData(){
-	    dataRow.append(answerTag).append(inTitle)
-		       .append(info('people.png',data.memberId, qTime, data.qna_No))
-		       .append(mainText('질문', data.question))
-		       .append(info('home.png', '관리자', aTime, null))
-		       .append(mainText('답변',answer)).appendTo(content);
-		uiCreate();
+	    dataRow.append(collapse.append(title).append(contents)).appendTo("div[data-role=content]");
+//		uiCreate();
 	   }
 	     	
 		/* 수정, 삭제 버튼 생성 */
@@ -740,32 +712,31 @@ function reservationCotrol(rsvData){
 		}
 		
 		/* 질문글 출력 제어*/
-		if(userNo == data.memberNo && userLv == "NORMAL"){//글쓴이와 작성자가 일치할때만
-			showData();
-		}else if(userLv == "ADMIN" &&  flag == false
-			&& (!data.answer || data.answer == '답변 대기중입니다.')){//대기 상태				
-			showData ();
-		}else if(userLv == "ADMIN" && flag == true){ //관리자일때만 전체 출력		
-			showData();
-		}
-		
-		$(".text-title").contents().addClass('text-block'); 
+//		if(userNo == data.memberNo && userLv == "NORMAL"){//글쓴이와 작성자가 일치할때만
+//			showData();
+//		}else if(userLv == "ADMIN" &&  flag == false
+//			&& (!data.answer || data.answer == '답변 대기중입니다.')){//대기 상태				
+//			showData ();
+//		}else if(userLv == "ADMIN" && flag == true){ //관리자일때만 전체 출력		
+//			showData();
+//		}
+	   showData();
 		$('div[data-role=content]').trigger('create'); // 화면갱신
-	}
 
+	}
+ 
 	// 데이터 가져오기
 }
 
 function loadRSVList(){
-	$.ajax(bit.contextRoot + '/reservation/list.ajax?memberNo=' + user.no 
-		+ '&roomNo=' + roomNo, 
-		{
+	$.ajax(bit.contextRoot + '/reservation/list.ajax?memberNo=' + user.no +  
+			'&roomNo=' + roomNo, {
 		type: 'POST',
 		dataType: 'json', 
 		success: function(jsonObj){
 			var result = jsonObj.ajaxResult;
 			var resultCount = result.data.list.length; //입력받은 data-set 개수 저장
-			if(result.status=='ok' && resultCount > 0){
+			if(result.status=='ok'){
 			   reservationCotrol(result);
 			}else{
 //				errorPage(1); //에러메세지 출력: 출력할 데이터 없음
@@ -781,3 +752,7 @@ function loadRSVList(){
 		}
 	});	
 }
+
+
+
+

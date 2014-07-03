@@ -24,6 +24,10 @@
 .line-border{border:1px solid black;}
 
 /* Room Contents */
+.no-border{
+	border: 0px solid white;
+}
+
 .room-table,.rsv-table{
   text-align: center;!important;
   border: 1px solid lightgray !important;
