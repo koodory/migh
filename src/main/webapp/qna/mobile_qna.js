@@ -248,10 +248,10 @@ function btnControl(){
 /* 10개 출력후 다음 출력을 위해서 로딩바 표시 및 제어 함수*/
 function loadingBar(){
 	
-	var frontBar = function(){
+	var finalBar = function(msg, func){
 	  $('.loader').remove();
-	  $('<button>').text('처음으로 가기').addClass('top-loader center')
-	  .attr("onclick","reset()").appendTo(content);  
+	  $("<button>").text(msg).addClass('top-loader center')
+	  .attr("onclick", func).appendTo(content);  
 	  $('div[data-role=content]').trigger('create'); 
 	  cntIndex = (cntIndex >=  count) ? 0 : cntIndex;
 	}
@@ -266,9 +266,11 @@ function loadingBar(){
 	
 	console.log(cntIndex, count);
 	if(userLv == "ADMIN" && cntIndex == count){ //처음으로 가기 
-		frontBar();
-	}else if(userLv == "ADMIN" && cntIndex >= 10){ //더 출력할 컨텐츠가 있음을 아이콘으로 알려줌
+		finalBar("처음으로 이동","reset()");
+	}else if(userLv == "ADMIN" && cntIndex >= pageSize){ //더 출력할 컨텐츠가 있음을 아이콘으로 알려줌
 		infiniteIcon();
+	}else if(userLv == "NORMAL" && cntIndex == count ){
+		finalBar("마지막 페이지","");
 	}
 }
 

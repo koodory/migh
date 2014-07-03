@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- SubjectMapper.xml -->
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<!-- DAO 인터페이스만 선언하고, 구현체를 자동 생성되게 하려면
+네임스페이스 이름을 인터페이스 이름과 같게 한다.
+SQL 아이디 값을 인터페이스의 메서드 이름과 같게 한다.
+ -->  
+<mapper namespace="migh.dao.MembersDao">
+ 
+  <resultMap type="migh.vo.MembersVo" id="membersMap">
+    <id column="Mem_Idx" property="no"/><!-- PK 컬럼에 대해서만 설정한다. -->
+    <result column="Mem_ID" property="id"/>
+    <result column="Mem_Name" property="name"/>
+    <result column="Mem_PW" property="password"/>
+    <result column="Mem_Email" property="email"/>
+    <result column="Mem_TEL" property="telephone"/>
+    <result column="Mem_BirDate" property="birthDate"/>
+    <result column="Mem_YN" property="status"/>
+    <result column="Mem_Crdate" property="registDate"/>
+    <result column="Mem_Level" property="level"/>
+  </resultMap> 
+  
+  <select id="getCount" resultType="int">
+      
+  </select>
+  
+  <select id="getLoginUser" parameterType="map" resultMap="membersMap">
+    select Mem_Idx, Mem_Name, Mem_Email, Mem_Level, Mem_ID
+    from Members
+    where Mem_ID=#{id} and Mem_PW=md5(#{password})
+  </select>
+  
+  <select id="getLoginId" parameterType="map" resultMap="membersMap">
+      select Mem_Idx, Mem_Name
+      from Members
+      where Mem_ID=#{id}
+  </select>
+  
+  <select id="getLoginEmail" parameterType="map" resultMap="membersMap">
+      select Mem_Idx, Mem_Name
+      from Members
+      where Mem_Email=#{email}
+  </select>
+  
+  <insert id="insert" parameterType="membersVo"
+      useGeneratedKeys="true" keyColumn="Mem_Idx" keyProperty="no">
+    insert into members 
+          (Mem_ID, Mem_Name, Mem_PW, Mem_Email, Mem_Tel, Mem_BirDate, Mem_YN, 
+           Mem_Level)
+    values (#{id}, #{name}, md5(#{password}), #{email}, #{telephone}, #{birthDate},
+           #{status}, #{level})                 
+  </insert>
+  
+   <select id="detail" parameterType="int" resultMap="membersMap">
+    select Mem_ID, Mem_Name, Mem_Email, Mem_Tel, Mem_BirDate, level
+    from Members
+    where Mem_ID=#{id}
+  </select>
+  
+  <update id="update" parameterType="membersVo">
+    update Members set
+     Mem_ID=#{id}, Mem_Name=#{name}, Mem_PW=#{password}, Mem_Email=#{email}, 
+     Mem_Tel=#{telephone}, Mem_BirDate=#{birthDate}, Mem_Level=#{level}
+    where Mem_ID=#{id}
+  </update>
+  
+  <delete id="delete" parameterType="int">
+    delete from Members
+    where Mem_Id=#{id} and Mem_PW=#{password}
+  </delete>
+  
+</mapper>

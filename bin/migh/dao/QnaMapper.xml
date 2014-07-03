@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- SubjectMapper.xml -->
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<!-- DAO 인터페이스만 선언하고, 구현체를 자동 생성되게 하려면
+네임스페이스 이름을 인터페이스 이름과 같게 한다.
+SQL 아이디 값을 인터페이스의 메서드 이름과 같게 한다.
+ -->  
+<mapper namespace="migh.dao.QnaDao">
+ 
+  <resultMap type="migh.vo.QnaVo" id="qnaMap">
+    <id column="Qna_Idx" property="qnaNo"/><!-- PK 컬럼에 대해서만 설정한다. -->
+    <result column="Mem_Idx" property="memberNo"/>
+    <result column="Qna_Title" property="title"/>
+    <result column="Qna_Q" property="question"/>
+    <result column="Qna_QDate" property="qDatetime"/>
+    <result column="Qna_Hit" property="hit"/>
+    <result column="Qna_A" property="answer"/>
+    <result column="Qna_ADate" property="aDatetime"/>
+    <result column="Mem_ID" property="memberId"/>
+  </resultMap> 
+
+   <select id="list" resultMap="qnaMap" parameterType="map">
+    select Qna_Idx, Q.Mem_Idx, Qna_Title, Qna_Q, Qna_QDate, Qna_Hit, Qna_A, 
+           Qna_ADate, Mem_ID 
+    from qna Q join members M
+    on Q.Mem_Idx=M.Mem_Idx
+    order by Qna_Idx desc
+    limit #{startIndex}, #{pageSize}
+  </select>
+  
+  <select id="count" resultType="int">
+    select COUNT(Qna_Idx) AS count FROM Qna
+  </select>  
+  
+  <insert id="insert" parameterType="qnaVo"
+    useGeneratedKeys="true" keyColumn="Qna_Idx" keyProperty="no">
+    insert into Qna 
+          (Mem_Idx, Qna_Title, Qna_Q, Qna_A, Qna_ADate)
+    values (#{memberNo}, #{title}, #{question}, #{answer}, #{aDatetime})                 
+  </insert>
+  
+   <update id="update" parameterType="qnaVo">
+    update Qna set
+     Qna_Idx=#{qnaNo}, Mem_Idx=#{memberNo}, Qna_Title=#{title}, 
+     Qna_Q=#{question}, Qna_A=#{answer}, Qna_ADate=#{aDatetime}, 
+     Qna_QDate=#{qDatetime}
+    where Qna_Idx=#{qnaNo}
+  </update>
+    
+  <delete id="delete" parameterType="qnaVo">
+    delete from Qna
+    where Qna_Idx=#{qnaNo}
+  </delete>
+  
+</mapper>
