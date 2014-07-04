@@ -44,7 +44,7 @@ public class PhotosControl {
         params.put("list",  photosService.list(pageNo, pageSize));
 
 		return new AjaxResult()
-			.setStatus(" ok")
+			.setStatus("ok")
 			.setData(params);
 	}
 
@@ -57,7 +57,7 @@ public class PhotosControl {
 			Model model) {
      try {
 			PhotosVo photos = new PhotosVo();
-			String fullPath = servletContext.getRealPath("/insert");
+			String fullPath = servletContext.getRealPath("/upload");
 			if (!photoFile.isEmpty()) {
 				String filename = 
 						System.currentTimeMillis() + "_" + ++fileCount;
@@ -68,9 +68,8 @@ public class PhotosControl {
 				photos.setPhotosTitle(photosTitle);
 				photos.setPhotosContent(photosContent);
 				photos.setPhotosImg(filename);
-				System.out.println("vo에 담긴 값 확인 :" + photos.toString());
-				model.addAttribute("photosVo", photos);
-				model.addAttribute("file1name", filename);
+//				model.addAttribute("photosVo", photos);
+//				model.addAttribute("photoFile", filename);
 				photosService.add(photos);
 			}
 			return new AjaxResult().setStatus("ok");

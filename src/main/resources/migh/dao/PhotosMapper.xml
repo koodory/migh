@@ -44,8 +44,7 @@ SQL 아이디 값을 인터페이스의 메서드 이름과 같게 한다.
    <update id="update" parameterType="photosVo">
     update Photos set
      Pho_Idx=#{photosNo}, Mem_Idx=#{memberNo}, Pho_Title=#{photosTitle}, 
-     Pho_Content=#{photosContent}, Pho_Img=#{photosImg}, Pho_Hit=#{photosHit}, 
-     Pho_CrDate=#{photosCrDate}
+     Pho_Content=#{photosContent}, Pho_Img=#{photosImg},Pho_CrDate=#{photosCrDate}
     where Pho_Idx=#{photosNo}
   </update>
     
