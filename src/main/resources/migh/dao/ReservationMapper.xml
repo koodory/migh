@@ -23,47 +23,19 @@ SQL 아이디 값을 인터페이스의 메서드 이름과 같게 한다.
     <result column="Rsv_PayYN" property="payStatus"/> <!-- 완납여부 -->
     <result column="Rsv_YN" property="rsvStatus"/> <!-- 예약여부 -->
     <result column="Rsv_Payback" property="refund"/> <!-- 환불금 -->
-    <result column="Rsv_Date" property="date"/>
-    <association property="members" resultMap="membersMap"></association>
-    <association property="rooms" resultMap="roomsMap"></association>
+    <result column="Rsv_Date" property="date"/> <!-- 예약일 -->
+    <result column="Mem_Name" property="userName"/> <!-- 회원이름 -->
+    <result column="Rom_Name" property="roomName"/>  <!--  방이름 -->
+    <result column="Rom_MaxNo" property="accomodate"/> <!-- 수용인원 --> 
   </resultMap> 
     
-  <resultMap id="membersMap" type="migh.vo.MembersVo">
-    <id column="Mem_Idx" property="no"/>
-    <result column="Mem_ID" property="id"/>
-    <result column="Mem_Name" property="name"/>
-    <result column="Mem_PW" property="password"/>
-    <result column="Mem_Email" property="email"/>
-    <result column="Mem_TEL" property="telephone"/>
-    <result column="Mem_BirDate" property="birthDate"/>
-    <result column="Mem_YN" property="status"/>
-    <result column="Mem_Crdate" property="registDate"/>
-    <result column="Mem_Level" property="level"/>
-  </resultMap> 
-  
-   <resultMap id="roomsMap" type="migh.vo.RoomVo">
-    <id column="Rom_Idx" property="no"/>
-    <result column="Rom_Name" property="name"/> 
-    <result column="Rom_Num" property="number"/> 
-    <result column="Rom_Size" property="size"/>
-    <result column="Rom_Square" property="square"/> 
-    <result column="Rom_MaxNo" property="accomodate"/>  
-    <result column="Rom_Content" property="detail"/>
-    <result column="Rom_Price1" property="offWdPrice"/>  
-    <result column="Rom_Price2" property="offWePrice"/> 
-    <result column="Rom_Price3" property="peakWdPrice"/>  
-    <result column="Rom_Price4" property="peakWePrice"/>  
-    <result column="RoomPic_Idx" property="picNo"/> 
-    <result column="Rom_Pic1" property="picPath"/> 
-  </resultMap> 
-  
    <select id="list" resultMap="rsvMap" parameterType="int">
-  SELECT B.*, 
-           M.Mem_ID, M.Mem_Email, 
+    SELECT B.*, 
+           M.Mem_ID, M.Mem_Name, R.Rom_MaxNo,
            R.Rom_Name, R.Rom_Price1, R.Rom_Price2, R.Rom_Price3, R.Rom_Price4
     from Reservations B, members M, Rooms R
     WHERE B.Mem_Idx = M.Mem_Idx AND B.Rom_Idx = R.Rom_Idx 
-          AND B.Mem_Idx = #{roomNo} ;
+          AND B.Mem_Idx = #{roomNo} AND date(B.Rsv_InDate) >= date(now())
   </select>
   
   <select id="count" resultType="int">
@@ -95,7 +67,7 @@ SQL 아이디 값을 인터페이스의 메서드 이름과 같게 한다.
   <select id="getDays" resultType="java.util.HashMap" parameterType="int">
    SELECT date(Rsv_InDate), date(Rsv_OutDate)
     from Reservations 
-    where date(RSV_InDate) >= date(now()) and Rsv_YN = 'Y'
+    where date(Rsv_InDate) >= date(now()) and Rsv_YN = 'Y'
           and Rom_Idx = #{roomNo}
     order by Rom_Idx, RSV_InDate asc
   </select>

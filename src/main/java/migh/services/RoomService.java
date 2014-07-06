@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import migh.vo.RoomCountVo;
+import migh.vo.RoomPicVo;
 import migh.vo.RoomVo;
 
 /* Service 객체의 호출 규칙 정의 = protocol = interface
@@ -14,6 +15,7 @@ import migh.vo.RoomVo;
 public interface RoomService {
 	int count();
 	List<RoomVo> list();
+	List<RoomPicVo> picList();
 	List<RoomCountVo> photoCount();
 	void upload(int index, String filename);
 }

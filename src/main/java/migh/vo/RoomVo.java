@@ -16,8 +16,8 @@ public class RoomVo implements Serializable {
   private int peakWdPrice; //성수기 주중 가격
   private int peakWePrice; //성수기 주말 가격
   private String createDate; //작성일
-  private int picNo; //사진번호
-  private String picPath; //사진경로
+//  private int picNo; //사진번호
+//  private String picPath; //사진경로
   
 	public int getNo() {
 		return no;
@@ -103,18 +103,18 @@ public class RoomVo implements Serializable {
 		this.createDate = createDate;
 		return this;
 	}
-	public int getPicNo() {
-		return picNo;
-	}
-	public RoomVo setPicNo(int picNo) {
-		this.picNo = picNo;
-		return this;
-	}
-	public String getPicPath() {
-		return picPath;
-	}
-	public RoomVo setPicPath(String picPath) {
-		this.picPath = picPath;
-		return this;
-	}
+//	public int getPicNo() {
+//		return picNo;
+//	}
+//	public RoomVo setPicNo(int picNo) {
+//		this.picNo = picNo;
+//		return this;
+//	}
+//	public String getPicPath() {
+//		return picPath;
+//	}
+//	public RoomVo setPicPath(String picPath) {
+//		this.picPath = picPath;
+//		return this;
+//	}
 }

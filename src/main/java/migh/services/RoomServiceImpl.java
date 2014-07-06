@@ -6,6 +6,7 @@ import java.util.Map;
 
 import migh.dao.RoomDao;
 import migh.vo.RoomCountVo;
+import migh.vo.RoomPicVo;
 import migh.vo.RoomVo;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,6 +53,15 @@ public class RoomServiceImpl implements RoomService {
 	public List<RoomCountVo> photoCount(){
 		try {
 			return roomDao.photoCount();
+		} catch (Throwable ex) {
+			throw new RuntimeException(ex);
+		}
+	}
+	
+	@Override
+	public List<RoomPicVo> picList() {
+		try {			
+			return roomDao.picList();
 		} catch (Throwable ex) {
 			throw new RuntimeException(ex);
 		}

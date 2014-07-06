@@ -17,9 +17,10 @@ public class ReservationVo implements Serializable{
   private int discount; //할인액
   private char payStatus; //완납여부
   private char rsvStatus; //예약여부
-  private char refund; //환불금 
-  private MembersVo members;
-  private RoomVo rooms;  
+  private char refund; //환불금   
+	private String userName; //예약자 이름
+  private String roomName; //방이름
+  private int accomodate; //수용인원
   
 	public int getNo() {
 		return no;
@@ -111,19 +112,26 @@ public class ReservationVo implements Serializable{
 	public ReservationVo setRefund(char refund) {
 		this.refund = refund;
 		return this;
+	}	
+  public String getUserName() {
+		return userName;
 	}
-	public MembersVo getMembers() {
-	  return members;
-  }
-	public ReservationVo setMembers(MembersVo members) {
-	  this.members = members;
-	  return this;
-  }
-	public RoomVo getRooms() {
-	  return rooms;
-  }
-	public ReservationVo setRooms(RoomVo rooms) {
-	  this.rooms = rooms;
-	  return this;
-  }
+	public ReservationVo  setUserName(String userName) {
+		this.userName = userName;
+		return this;
+	}
+	public String getRoomName() {
+		return roomName;
+	}
+	public ReservationVo  setRoomName(String roomName) {
+		this.roomName = roomName;
+		return this;
+	}
+	public int getAccomodate() {
+		return accomodate;
+	}
+	public ReservationVo  setAccomodate(int accomodate) {
+		this.accomodate = accomodate;
+		return this;
+	}
 }

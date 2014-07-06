@@ -32,14 +32,13 @@ public class RoomControl {
 
 	@RequestMapping("/list")
 	public AjaxResult list() {
-		
 		HashMap<String,Object> params = new HashMap<String,Object>();
+		params.put("photo", roomService.photoCount());
 		params.put("count", roomService.count());
     params.put("list",  roomService.list());
-    params.put("photo", roomService.photoCount());
-    
+    params.put("image", roomService.picList());
+   
 		return new AjaxResult()
-			.setStatus("ok")
-			.setData(params);
+			.setStatus("ok").setData(params);
 	}
 }

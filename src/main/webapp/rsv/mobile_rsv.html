@@ -182,26 +182,26 @@
 	
   	<!-- 예약확인 -->
 
-    <div id="rsv-list" data-role="page">
+  <div id="rsv-list" data-role="page">
 
-      <div data-role="content" class="center">
-        <H2>예약 리스트</H2>
-      </div>
-
-      <div data-role="footer" data-theme="b" data-position="fixed">
-        <div data-role="navbar">
-          <ul>
-            <li><a href='#' onclick='location.href="../index.html"'
-                 onclick = "cleanData()"  data-icon="home">메인</a></li>
-            <li><a href='#room-page' class="verify" data-icon="grid" 
-                  onclick="clearList()" data-transition="slide" 
-                  data-direction="reverse">객실 보기</a></li>
-          </ul>
-        </div>
-      </div>
-
+    <div data-role="content" class="center">
+      <H2>예약 리스트</H2>
     </div>
-   <script src="../js/jquery-1.11.1.js"></script>
+
+    <div data-role="footer" data-theme="b" data-position="fixed">
+      <div data-role="navbar" data-position="fixed">
+        <ul>
+          <li><a href='#' onclick='location.href="../index.html"'
+            onclick="cleanData()" data-icon="home">메인</a></li>
+          <li><a href='#room-page' class="verify" data-icon="grid"
+            onclick="clearList()" data-transition="slide"
+            data-direction="reverse">객실 보기</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <script src="../js/jquery-1.11.1.js"></script>
    <script src="../js/jquery.mobile-1.4.2.min.js"></script>
    <script src="../js/common.js"></script>
    <script src="datepicker/jquery.mobile.datepicker.js"></script>
