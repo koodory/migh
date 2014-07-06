@@ -89,13 +89,13 @@ SQL 아이디 값을 인터페이스의 메서드 이름과 같게 한다.
     
   <delete id="delete" parameterType="reservationVo">
     delete from Reservations
-    where Rsv_Idx=#{no} AND Mem_Idx=#{memberNo} AND Rom=Idx{roomNo}
+    where Rsv_Idx=#{no} AND Mem_Idx=#{memberNo} AND Rom_Idx=#{roomNo}
   </delete>
   
   <select id="getDays" resultType="java.util.HashMap" parameterType="int">
    SELECT date(Rsv_InDate), date(Rsv_OutDate)
     from Reservations 
-    where date(RSV_InDate) >= date(now()) and Rsv_PayYN = 'Y' and Rsv_YN = 'Y'
+    where date(RSV_InDate) >= date(now()) and Rsv_YN = 'Y'
           and Rom_Idx = #{roomNo}
     order by Rom_Idx, RSV_InDate asc
   </select>

@@ -115,6 +115,7 @@ input,button{opacity: 1.0 !important;}
 .blue{color:blue;}
 .bold{font-weight:bold;}
 .white{color:white !important;}
+.small{font-size: 12px;}
 
 /* 바탕색 */
 .bg-yellow{background-color: yellow !important;}

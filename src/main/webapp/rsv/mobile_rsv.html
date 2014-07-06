@@ -91,12 +91,12 @@
         <div class="ui-block-a">
           <a id='btnRegist' href='#rsv-page' data-role='button' data-icon='check'
             data-iconpos="left" class="bg-green white remove-shadow"
-            onclick="reservation();" data-transition="slide"
+            onclick="reservation('rsv');" data-transition="slide"
             style="background-color:DarkKhaki !important;" 
             >예약</a>
         </div>
         <div class="ui-block-b">
-          <a href='#rsv-list' data-role='button' onclick="reservation();"
+          <a href='#rsv-list' data-role='button' onclick="reservation('list');"
             data-icon='info' data-iconpos="left" style="background-color:MediumSeaGreen !important;"
             class="white remove-shadow" data-transition="slide">예약확인</a>
         </div>
@@ -142,8 +142,8 @@
 			<ul data-role="listview" data-inset="true" class='center'
 				data-divider-theme="a">
 				<li data-role="list-divider"><h1 class='center'>입실 날짜</h1></li>
-            <input type="text" id="checkinInput" style="text-align:center;"
-             onfocus = 'popup("checkin","입실 날짜");'  >
+        <input type="text" id="checkinInput" onfocus = 'popup("checkin","입실 날짜");' 
+         style="text-align:center;" readonly="readonly" >
 
 			</ul>
 			
@@ -151,7 +151,7 @@
 				data-divider-theme="a">
 				<li data-role="list-divider"><h1 class='center'>퇴실 날짜</h1></li>
 			<input type="text" id="checkoutInput" onfocus = 'popup("checkout","퇴실 날짜");'
-       style="text-align:center;" readonly="true">
+       style="text-align:center;"  readonly="readonly">
 			</ul>
 			
        <ul data-role="listview" data-inset="true" class='center' id="showResult"
@@ -162,7 +162,8 @@
       
 			<a href="#" data-transition="slide">
 				<button type="button" data-role="none" onclick = "addList()"
-					class="btn btn-primary btn-lg btn-block button-top-margin">예약완료</button>
+				  style="display:none;" class="btn btn-primary btn-lg btn-block button-top-margin"
+          id="rsv-confirm-btn"> 예약완료</button>
 			</a>
 			<!-- 예약 버튼 -->
 		</div>
@@ -184,24 +185,17 @@
     <div id="rsv-list" data-role="page">
 
       <div data-role="content" class="center">
-        <h2>예약 리스트</h2>
-        
-        <div class="right">예약일</div>
-<!--         <div id="confirmBox" class="line-border"></div> -->
-<!--           <button type='button' onclick='location.href="#rsv-confirm"' -->
-<!--         data-role="none" class="btn btn-block btn-lg btn-primary btn_space" -->
-<!--         style="width: 95%;">예약변경</button> -->
-     </div>
+        <H2>예약 리스트</H2>
+      </div>
 
       <div data-role="footer" data-theme="b" data-position="fixed">
         <div data-role="navbar">
           <ul>
-            <li><a href='#' data-icon="arrow-l" id="prev"
-              data-transition="slide" data-direction="reverse">이전</a></li>
-            <li><a href='#room-page' class="verify" data-icon="grid"
-              data-transition="slide" data-direction="reverse">객실 보기</a></li>
-            <li><a href='#' data-icon="arrow-r" id="next"
-              data-transition="slide">다음</a></li>
+            <li><a href='#' onclick='location.href="../index.html"'
+                 onclick = "cleanData()"  data-icon="home">메인</a></li>
+            <li><a href='#room-page' class="verify" data-icon="grid" 
+                  onclick="clearList()" data-transition="slide" 
+                  data-direction="reverse">객실 보기</a></li>
           </ul>
         </div>
       </div>

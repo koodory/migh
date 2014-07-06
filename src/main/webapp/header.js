@@ -1,9 +1,4 @@
-var contextPath = bit.getContextRootPath(); 
-
-function deleteCookie(c_name) {
-	  document.cookie = encodeURIComponent(c_name) 
-	  + "=deleted; expires=" + new Date(0).toUTCString();
-}
+var contextPath = bit.contextRoot; 
 
 $(function(){
 	$.getJSON(
@@ -24,8 +19,6 @@ function logOut(){
 			function(jsonObj) {
 		var result = jsonObj.ajaxResult;
 		console.log(result);
-		document.cookie="JSESSIONID=123;Path=/managerconsole;"
-		deleteCookie("JSESSIONID");
 		location.href = contextPath + "/auth/login.html";
 	});
 }

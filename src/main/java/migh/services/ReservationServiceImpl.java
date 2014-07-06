@@ -121,9 +121,9 @@ public class ReservationServiceImpl implements ReservationService {
 		   ArrayList<String> days = new ArrayList<String>();
 //		   ArrayList<Integer> no = new ArrayList<Integer>();
 		   DateFormat df = new SimpleDateFormat("yyyy-MM-dd");  
-		   String checkin, checkout;
+		   String checkin, checkout, count;
 //		   int index, revIdx = 0;
-		    
+		    		   
 		    for(int i=0; i < dates.size(); i++){
 					 HashMap<String, String> getMap = dates.get(i); 
 					 checkin = (String)df.format(getMap.get("date(Rsv_InDate)")); 
@@ -135,7 +135,7 @@ public class ReservationServiceImpl implements ReservationService {
 //					 index = ((int)obj+1) - revIdx; // 인덱스가 1부터 시작하도록 보정
 //					 no.add(index);
 		       List<String> temp = getDiffDays(checkin, checkout);
-		       days.addAll(temp);
+		       days.addAll(temp); 
 //		       if(i == 0 || index == no.get(i-1)){  // 전데이터와 현데이터의 방이 같을때
 //		         days.addAll(temp);
 //		         if(index == dates.size()-1){ // 마지막 데이터 일때

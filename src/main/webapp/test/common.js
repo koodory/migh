@@ -1,6 +1,6 @@
 function bit(){}
 bit.getContextRootPath = function(){
-var currPath = '14.32.7.49.9:8080/migh'
+var currPath = 'http://14.32.66.98:8080/migh'
 return currPath;
 }
 
