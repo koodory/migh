@@ -4,10 +4,7 @@ var getHeight = ($(document).height())/4;
 var slideWidth = getWidth/4;
 var contextPath = bit.getContextRootPath(); 
 var count, currNo = 0, fisrtNo = 0;
-var user = {};
-var room = {}; 
-var allRoom = {};
-var allRsv = {};
+var user = {}, room = {}, allDays = {}, allRoom = {},allRsv = {}, myDays={};
 var rsv = {
 		no: null, memberNo: null, roomNo: null, headcount: null, checkin: null,		
 		checkout: null, basicPrice: 0, deposit: 0, discount: 0, refund: 0,
@@ -348,6 +345,8 @@ function popup(idx, message, subtitle) {
 				}
 			}).popup("open");   
 
+      unAvailableList(num);
+			
 			$("[data-role=popup]").trigger('create');
 			if(idx != "delete") setDatePicker("#" + idx); 
 } 
@@ -402,6 +401,51 @@ function loadRSVList(flag){
 	});	
 }
 
+/* 제외할 예약일 생성*/
+function unAvailableList(num){
+	
+	function getArray(index){
+	 var first = objDate(myDays[index][0]);
+	 var start = objDate(myDays[index][0]);
+	 var end = objDate(myDays[index][1]);
+	 var array = [], strArray = [];
+
+	 array.push(first);
+		 while(start < end) {
+		array.push(start);
+		start = new Date(start.setDate(
+				start.getDate() + 1
+		  ))
+		  }
+		$.each(array, function(index,value){
+		  strArray[index] = value.toString("yyyy-MM-dd");
+	  });
+		return strArray;  
+	} 
+	
+	var obj = allRsv[num];
+	var exception = getArray(obj.no);
+	rsvday = allDays[obj.roomNo];
+
+		$.each(rsvday, function(index,value){
+		  if($.inArray(value, exception) != -1){ //-1 : 두 값이 동일하지 않음
+			  console.log(value, exception, $.inArray(value, unAvailableDates));
+		  }else{
+		  	unAvailableDates.push(value);
+		  }
+	  });
+	console.log(unAvailableDates);
+}
+
+/* 내 예약일 배열 생성*/
+function getMyDays(){
+  if(rsv.memberNo == user.no){
+  	myDays[rsv.no] = [];
+  	myDays[rsv.no].push(rsv.checkin);
+  	myDays[rsv.no].push(rsv.checkout);
+  }
+}
+
 /* 오류 메세지 출력 */
 function errorPage(number){
 	var str2 = null;
@@ -437,25 +481,30 @@ function reservationCotrol(rsvData){
 	
   console.log(rsvData);
 	$.each(rsvData.data, function(index, obj){
-		if(index == "days"){ //예약 가능일
-			unAvailableDates = obj;
-			console.log(unAvailableDates);
-		}else if(index == "list"){ //예약확인 시만
+	 if(index == "list"){ //예약확인 시만
 			if(obj.length == 0){ 
 				rsvNull(); 
 			}else{
-				$.each(obj, function(index, value){
-					allRsv[index] = []; // 이용자의 전체 예약정보 배열 생성
-					allRsv[index].push(value);
+				$.each(obj, function(index, value){ // 이용자의 전체 예약정보 배열 생성	
+					allRsv[index] = value;
 					$.each(value, function(index2, value2){
-							rsv[index2] = value2; // 예약정보 배열 생성
+						rsv[index2] = value2; // 예약정보 배열 생성
+						if(index2 == "userName")
+						  getMyDays();
 					});
 					showConfirmData(num++);
 				});
 			}
+		}else if(index == "rsvDays"){ //방별 예약일 배열 생성
+      $.each(obj, function(index, value){
+    		allDays[index] = [];
+      	$.each(value, function(index2, value2){
+          allDays[index].push(value2);
+      	});
+      });			
 		}
 	});
-
+	
 	/* 예약확인시 예약 관련 데이터 생성 함수*/
 	function showConfirmData(num){ 
 		if(rsv.rsvStatus == "Y"){ //예약일 경우
@@ -623,7 +672,7 @@ function rsvUpdateControl(element, flag){
   
   var pos = $("div#rsv-"+num);
 	var listVal = function(property){
-		  return allRsv[num][0][property];
+		  return allRsv[num][property];
 	}
 	
 	/* 변경을 위한 입력상태 */
