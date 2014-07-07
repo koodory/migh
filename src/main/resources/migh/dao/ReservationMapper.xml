@@ -72,4 +72,11 @@ SQL 아이디 값을 인터페이스의 메서드 이름과 같게 한다.
     order by Rom_Idx, RSV_InDate asc
   </select>
   
+  <select id="rsvDays" resultType="java.util.HashMap" parameterType="int">
+   SELECT Rom_Idx, date(Rsv_InDate), date(Rsv_OutDate)
+    from Reservations 
+    where date(Rsv_InDate) >= date(now()) and Rsv_YN = 'Y'
+    order by Rom_Idx, Rsv_InDate asc
+  </select>
+  
 </mapper>

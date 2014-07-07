@@ -34,6 +34,7 @@ public class ReservationControl {
 		HashMap<String,Object> params = new HashMap<String,Object>();
 		params.put("count", reservationService.count());
 		params.put("days", reservationService.getDays(roomNo));
+		params.put("rsvDays", reservationService.rsvDays());
     
     if(reservationService.list(memberNo) != null){
       params.put("list",  reservationService.list(memberNo));
@@ -43,6 +44,7 @@ public class ReservationControl {
 			.setStatus("ok")
 			.setData(params);
 	}
+	
 		
 	@RequestMapping(value="/insert", method=RequestMethod.POST)
 	public AjaxResult insert(ReservationVo vo) {		

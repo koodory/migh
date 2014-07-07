@@ -6,6 +6,8 @@ var contextPath = bit.getContextRootPath();
 var count, currNo = 0, fisrtNo = 0;
 var user = {};
 var room = {}; 
+var allRoom = {};
+var allRsv = {};
 var rsv = {
 		no: null, memberNo: null, roomNo: null, headcount: null, checkin: null,		
 		checkout: null, basicPrice: null, deposit: 0, discount: 0,
@@ -91,13 +93,6 @@ $(document).ready(function(){
 		                  "7월","8월","9월","10월","11월","12월"],
 		dayNamesMin: ["일" , "월", "화", "수", "목", "금", "토"],
 		showAnim: "slideDown"
-//    onSelect: function(){
-//      var day1 = $("#checkin").datepicker('getDate').getDate()+1;                 
-//      var month1 = $("#checkin").datepicker('getDate').getMonth() + 1;             
-//      var year1 = $("#checkin").datepicker('getDate').getFullYear();
-//      var fullDate = year1 + "-" + month1 + "-" + day1;
-//      var str_output = alert(fullDate);
-//  }
 	});
 	/* 입실날짜 입력*/	
 	$("#checkinInput").focus(function(){
@@ -124,6 +119,27 @@ $(document).ready(function(){
 		$("#"+label+"Input").val("");
 	});
 
+	/** 예약 List UI **/
+	/* 예약 확인창 높이 설정*/
+	$("#confirmBox").css("height","300px");
+	/* 예약 리스트 삭제 확인 버튼 */
+	$(document).on("click", "#delete", function () {
+		deleteRSVList();
+	});
+	/* 예약 리스트 삭제 취소 버튼*/	
+	$(document).on('click','a.deleteBtn', function(){  
+		popup("delete","예약취소", "확인을 누르면 예약이 취소됩니다.");
+	});
+	/* 예약 변경 버튼*/	
+	$(document).on('click','a.changeBtn', function(event){  
+		rsvUpdateControl($(this), true);
+		return false;
+	});
+	/* 예약 변경취소 버튼*/	
+	$(document).on('click','a.cancelBtn', function(){  
+		rsvUpdateControl($(this), false);
+		return false;
+	});
 	/* 객실 정보를 터치로 이동할수 있게끔 설정하는 함수*/
 	function touchCreate(){
 		$(document).on('swipeleft','div#touch-area',function(){
@@ -170,6 +186,10 @@ function pageControl(roomNo){
 	var num = 0, index = 0, data, cnt=new Array(), max = 4;
 	$.each(result.data, function(index1,obj){		
 		$.each(obj, function(index2,data){
+			if(data.name){
+				allRoom[index2] = []
+				allRoom[index2].push(data);
+			}
 			if(data.count){
 				if(index2 == 0) { revIdx =  data.no - 1; } //방번호가 1이 아닐경우 보정
 				cnt[index2] = data.count; // 각방의 사진개수를 저장하는 배열
@@ -295,7 +315,11 @@ var getAllDays = function () {
 /* 데이트피커 날짜 입력 오류처리*/
 var setDatePicker = function(element){
   $(element).datepicker();
-  
+  console.log("setDate : ",tempIndate, tempOutdate);
+	if(element != "#checkout" && element !="#checkin" ){
+	  $(element).datepicker("setDate", $("input" + element + "-text").val()); 
+//	  return;
+ 	}
 	if(element == "#checkout" && $("#checkinInput").val() != null &&
 			$("#checkinInput").val() != "" ){
 
@@ -389,8 +413,8 @@ var parseDate = function(date){
 function popup(idx, message, subtitle) {
 	var title = $('<h3>').text(message).addClass("center");
 	var subText = $("<div>").append(subtitle).addClass("top-mg-01 bottom-mg-01");
-	var num = idx.split("-")[3]; //예약 리스트 인덱스
-
+  var num = idx.split("-")[3]; //예약 리스트 인덱스
+	
 	var content = $('<div>').attr("id",idx)
 	.css({"margin-left":"auto","margin-right":"auto"});
 
@@ -401,11 +425,22 @@ function popup(idx, message, subtitle) {
 					'data-rel':"back"}).addClass(name).text(msg));
 	}
 
-	var btn = $('<div>').addClass("ui-grid-a")
-	.css({"max-width":"340px","margin-left":"auto","margin-right":"auto"})
-	.append(createBtn('a', "confirm", "confirm-date",'확인'))
-	.append(createBtn('b', "cancel", "cancel-date",'취소'));
-
+	if(idx == "delete"){
+		var btn = $('<div>').addClass("ui-grid-a")
+		.css({"max-width":"98%","margin-left":"auto","margin-right":"auto"})
+		.append(createBtn('a', "delete", "delete-btn",'확인'))
+		.append(createBtn('b', "", "",'취소'));
+	}else if(idx == "checkin" || idx == "checkout"){
+		var btn = $('<div>').addClass("ui-grid-a")
+		.css({"max-width":"340px","margin-left":"auto","margin-right":"auto"})
+		.append(createBtn('a', "confirm", "confirm-date",'확인'))
+		.append(createBtn('b', "cancel", "cancel-date",'취소'));
+	}else{
+		var btn = $('<div>').addClass("ui-grid-a")
+		.css({"max-width":"340px","margin-left":"auto","margin-right":"auto"})
+		.append(createBtn('a', "confirm", "confirm-list-" + num , '확인'))
+		.append(createBtn('b', "cancel", "cancel-list-" + num , '취소'));
+	}
 
 	var setHeight = (subtitle == null) ?
 			$(window).height() / 1.3  + "px" : "150px";
@@ -446,8 +481,25 @@ function popup(idx, message, subtitle) {
 			}).popup("open");   
 
 			$("[data-role=popup]").trigger('create');
-			setDatePicker("#" + idx); 
-}
+			if(idx != "delete") setDatePicker("#" + idx); 
+			if(idx.split("-")[2] == "indate" ||  idx.split("-")[2] == "outdate"  ){
+				$(document).on("click", ".confirm-list-" + num, function () {
+					rsv.basicPrice = null;
+
+					if(idx.split("-")[2] == "indate"){
+						tempIndate = $("#"+idx).val(); 
+							$("#"+idx).val();
+						$("input#" + idx + "-text").val(tempIndate);
+					}else{
+						tempOutdate = $("#"+idx).val(); 
+						$("input#" + idx + "-text").val(tempOutdate);
+					}
+		       console.log("popup : ",tempIndate, tempOutdate);
+//					$("#"+label+"Input").val($("#"+label).val());
+//					getAllDays();
+				});	
+			}
+} 
 
 var reservation = function(flag){
 	/* 투숙일짜 초기화*/
@@ -549,7 +601,132 @@ function errorPage(number){
 	.appendTo(content);
 	$('div[data-role=content]').trigger('create'); 
 }
+/* RSV 및 Room 예약일 데이터 parsing*/
+function reservationCotrol(rsvData, flag){		
+	var num = 0; //카운트 변수
+	/* 예약데이터가 없을 경우 3초후 이전페이지로 redirect*/
+	var rsvNull = function(){
+		$("<div>").addClass("rsvRow bold red")
+		.css({"height": $(document).height()/1.8 + "px"})
+		.append($("<div>").text(user.name + "님의 예약사항이 없습니다.")
+				.css({ "display":"inline-block","margin-top":"40%"}))
+				.appendTo("div[data-role=content]");
 
+		setTimeout(function() {
+			$(".rsvRow").remove();
+			$.mobile.changePage("#room-page"); 
+		}, 3000);
+	}
+  console.log(rsvData, flag);
+	$.each(rsvData.data, function(index, obj){
+		if(index == "days"){ //예약 가능일
+			unAvailableDates = obj;
+		}else if(index == "list" && flag == "list"){ //예약확인 시만
+			if(obj.length == 0){ 
+				rsvNull(); 
+			}else{
+				$.each(obj, function(index, value){
+					allRsv[index] = []; // 이용자의 전체 예약정보 배열 생성
+					allRsv[index].push(value);
+					console.log(allRsv);
+					$.each(value, function(index2, value2){
+							rsv[index2] = value2; // 예약정보 배열 생성
+					});
+					showConfirmData(num++);
+				});
+			}
+		}
+	});
+
+	/* 예약확인시 예약 관련 데이터 생성 함수*/
+	function showConfirmData(num){ 
+		if(rsv.rsvStatus == "Y"){ //예약일 경우
+			mark = 'text-answer remove-shadow'; 
+			str = '예약';
+		}else{ // 그외 
+			mark = 'text-no-answer';
+			str ='대기';
+		}
+
+		if(num == 0){
+			var subTitle = $("<div>").text("예약자 : " + user.name)
+			.addClass("rsvRow top-mg-01 bottom-mg-02")
+			.appendTo('div[data-role=content]');
+		}
+
+		var colText = (num == 0) ? "false": "true";
+		var rsvRow = $("<div>").addClass("rsvRow").attr({
+			"data-role":"collapsible", 
+			"data-theme":"a",
+			"data-content-theme":"a",
+			"data-iconpos" : "left", 
+			"data-collapsed-icon" : "carat-d", 
+			"data-expanded-icon" : "carat-u",
+			"id" : "rsv-" + num, 
+			"data-collapsed" : colText
+		});
+
+		var showDate = function(data, flag){
+			var date = data.substr(0,10);
+			var dateText;
+			if(flag == true){
+				dateText = parseDate(date)[0] + "년 " + parseDate(date)[1] 
+				+ "월 " + parseDate(date)[2] + "일";
+			}else{
+				dateText = parseDate(date)[1] + "월 " + parseDate(date)[2] + "일";
+			}
+			return dateText;
+		}
+
+		var title = $('<h3>').text(showDate(rsv.checkin, false)+ " "+ rsv.roomName)
+		.append($('<div>' + str + '</div>').addClass(mark));
+
+		var listShow = function(){
+			var totCost = rsv.basicPrice - rsv.discount -rsv.deposit;
+			var rsvText = (rsv.rsvStatus == "Y") ? "예약" : "예약대기";
+			var payText = (rsv.payStatus =="Y") ? "완납" : "미납";
+			rsv.refund = (rsv.payStatus == "Y") ? (rsv.deposit + totCost) : rsv.deposit;
+
+			var start = objDate(rsv.checkin.substr(0,10)).getTime();
+			var end = objDate(rsv.checkout.substr(0,10)).getTime();
+			var getNight = (end - start)/ 1000 / 60 / 60 / 24;
+
+			var rsvDay = Date.today().toString("yyyy-MM-dd"); 
+
+			var tableData = function(name, value, clazz){
+				return   $("<tr>").append($("<td>").text(name).addClass("rsv-label"))
+				.append($("<td>").text(value).attr("id","rsv-" + clazz + "-" + num));
+			}
+
+			var table = $("<table>").addClass("rsv-table table-" + num)
+			.append(tableData("예약번호", rsv.no, "no"))
+			.append(tableData("예약상태", rsvText, "rsv"))
+			.append(tableData("예약일", showDate(rsv.date,true), "date"))
+			.append(tableData("방이름", room.name, "name"))
+			.append(tableData("숙박인원", rsv.headcount + "명", "number"))
+			.append(tableData("입실날짜", rsv.checkin, "indate"))
+			.append(tableData("퇴실날짜", rsv.checkout, "outdate"))
+			.append(tableData("숙박기간", 
+					getNight + "박 " + (getNight+1) + "일", "lodge"))
+					.append(tableData("기본 입실료", rsv.basicPrice + "원", "price"))
+					.append(tableData("예약금", rsv.deposit + "원", "deposit"))
+					.append(tableData("할인료", rsv.discount + "원", "discount"))
+					.append(tableData("미납금", totCost + "원", "nopay"))
+					.append(tableData("완납여부", payText, "status"));
+
+			var msg = $("<div>").text("< 객실은 변경할수 없습니다. >")
+			.addClass("center small top-mg-01");
+
+			var contents = $('<ul>').attr("data-role","listview")
+			.append($("<li>").append($("<div>").append(table).append(msg)));
+
+			rsvRow.append(title).append(contents).appendTo("div[data-role=content]");
+			uiCreate("init", num);
+		}
+		listShow();
+  }
+	$('div[data-role=content]').trigger('create'); // 화면갱신
+}
 	/* 객실 및 예약 정보 불러오기 ajax(list) */
 function loadRSVList(flag){
 	$.ajax(bit.contextRoot + '/reservation/list.ajax?memberNo=' + user.no +  
@@ -574,43 +751,10 @@ function loadRSVList(flag){
 		}
 	});	
 }
-
-/* RSV 및 Room 예약일 데이터 parsing*/
-function reservationCotrol(rsvData, flag){		
-	var num = 0; //카운트 변수
-	/* 예약데이터가 없을 경우 3초후 이전페이지로 redirect*/
-
-  console.log(rsvData, flag);
-	$.each(rsvData.data, function(index, obj){
-		if(index == "days"){ //예약 가능일
-			unAvailableDates = obj;
-		}
-	});
-}
-
-/* 객실 및 예약 정보 불러오기 ajax(list) */
-function loadRSVList(flag){
-	$.ajax(bit.contextRoot + '/reservation/list.ajax?memberNo=' + user.no +  
-			'&roomNo=' + roomNo, {
-		type: 'POST',
-		dataType: 'json', 
-		success: function(jsonObj){
-			var result = jsonObj.ajaxResult;
-			if(result.status=='ok'){
-				reservationCotrol(result, flag);
-			}else{
-//				errorPage(1); //에러메세지 출력: 출력할 데이터 없음
-				console.log(result.status);
-				console.log(jsonObj);
-			}
-		},
-		error: function(xhr, status, errorThrown){
-			errorPage(0); // 에러메세지: 통신 오류
-			alert("통신 오류");
-			console.log(status);
-			console.log(errorThrown);
-		}
-	});	
+/* 페이지 이동시 예약정보 제거(rsvRow) */
+function clearList(){ 
+	$(".rsvRow").remove();
+	loadRoomList();
 }
 
 /* 예약 추가 ajax(insert) */
@@ -641,3 +785,119 @@ function addList(){
 	});
 	clearForm();
 }
+/* 예약 변경 ajax(update) - 일반, 관리자 공용 */
+function deleteRSVList(){
+	console.log(rsv.no, user.no, room.no);
+
+	$.ajax(bit.contextRoot + '/reservation/delete.ajax', {
+		type: 'POST',
+		dataType: 'json', 
+		data: { 
+			no: rsv.no,
+			memberNo: user.no,
+			roomNo: rsv.roomNo
+		},
+		success: function(jsonObj){
+			var result = jsonObj.ajaxResult;
+			if(result.status=='ok'){
+				$(".rsvRow").remove();
+				$.mobile.changePage("#room-page");
+			}else{
+//				errorPage(1); //에러메세지 출력: 출력할 데이터 없음
+				console.log(result.status);
+				console.log(jsonObj);
+			}
+		},
+		error: function(xhr, status, errorThrown){
+			errorPage(0); // 에러메세지: 통신 오류
+			alert("통신 오류");
+			console.log(status);
+			console.log(errorThrown);
+		}
+	});	
+}
+
+/* 변경, 삭제 버튼 생성 */
+function uiCreate(flag, num, element){
+	var btn = function(block, msg, str){
+		return $('<div>').addClass('ui-block-' + block)
+		.append($('<a>').attr({ 'href':'#', 'data-role':'button'})
+		.addClass(str).text(msg));
+	}
+	
+	if(flag == "init"){ // 처음
+		$('<div>').addClass('ui-grid-a ui-crud-btn btn-'+ num)
+		.append(btn('a', '변경', 'changeBtn btn-'+num))
+		.append(btn('b', '삭제', 'deleteBtn btn-'+num).attr('data-transition','pop'))
+		.appendTo($(".rsvRow").contents(":last"));
+	}else if(flag == true){  //취소버튼을 누를경우
+		$("div.btn-" + num).remove();
+		$('<div>').addClass('ui-grid-a ui-crud-btn btn-'+num)
+		.append(btn('a', '변경', 'changeBtn btn-'+num))
+		.append(btn('b', '삭제', 'deleteBtn btn-'+num).attr('data-transition','pop'))
+		.appendTo($("div#rsv-" + num).contents(":last"));
+	}else{ // 변경 버튼 누를 경우
+		$("div.btn-" + num).remove();
+		$('<div>').addClass('ui-grid-a ui-crud-btn btn-'+num)
+		.append(btn('a', '확인', 'confirmBtn btn-'+num))
+		.append(btn('b', '취소', 'cancelBtn btn-'+num))
+		.appendTo($("div#rsv-" + num).contents(":last"));
+	}
+	$('div[data-role=content]').trigger('create'); // 화면갱신
+}
+
+/* 예약 변경 제어 함수*/
+function rsvUpdateControl(element, flag){	
+	roomNo = rsv.roomNo;	
+	
+  var num = element.attr("class").split(" ")[1].split("-")[1];
+  var pos = $("div#rsv-"+num);
+	var listVal = function(property){
+		  return allRsv[num][0][property];
+	}
+	/* 변경을 위한 입력상태 */
+	function rsvUICreate(name, value, atr, atr2){
+		var node = "td#rsv-" + name +  "-" + num;
+		$(node).text("");
+		$("<input>").css("text-align","center")
+		.val(value).attr({"type":"text",
+			                 "id":"rsv-input-"+name+"-"+num+"-text", "onfocus":atr,
+			                 "readonly" : atr2})
+		.appendTo($(node));
+		$(node).trigger("create");
+	}
+    /* 초기 상태 */
+	function rsvInit(name, property){
+		var node = "td#rsv-" + name +  "-" + num; 
+		$(node).contents().remove();
+		$(node).text(listVal(property));
+	}
+
+	if(flag == true){
+		if(user.level == "NORMAL"){
+
+			rsvUICreate("name", listVal("roomName"));
+			rsvUICreate("number", listVal("headcount"));
+			rsvUICreate("indate", listVal("checkin"),
+					     "popup('rsv-input-indate-" + num + "','입실 날짜')", "readonly");
+			rsvUICreate("outdate", listVal("checkout"),
+	            "popup('rsv-input-outdate-" + num + "','퇴실 날짜')", "readonly");
+		}else if(user.level == "ADMIN"){
+
+		}
+	  uiCreate(false, num, element);
+	}else	if(flag == false){
+		if(user.level == "NORMAL"){
+			rsvInit("name", "roomName");
+			rsvInit("number", "headcount");
+			rsvInit("indate", "checkin");
+			rsvInit("outdate", "checkout");
+		}else{
+
+		}
+	  uiCreate(true, num, element);
+	}
+}
+
+
+

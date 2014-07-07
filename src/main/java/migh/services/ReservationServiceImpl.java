@@ -116,39 +116,61 @@ public class ReservationServiceImpl implements ReservationService {
   @Override
 	public ArrayList<String> getDays(int roomNo){
 		try {
-		   List<HashMap<String, String>> dates =  reservationDao.getDays(roomNo);
-//		   HashMap<Integer, ArrayList<String>> dayArray = new HashMap<Integer, ArrayList<String>>();; 
+		   List<HashMap<String, String>> dates =  reservationDao.getDays(roomNo); 
 		   ArrayList<String> days = new ArrayList<String>();
-//		   ArrayList<Integer> no = new ArrayList<Integer>();
 		   DateFormat df = new SimpleDateFormat("yyyy-MM-dd");  
-		   String checkin, checkout, count;
-//		   int index, revIdx = 0;
+		   String checkin, checkout;
 		    		   
 		    for(int i=0; i < dates.size(); i++){
 					 HashMap<String, String> getMap = dates.get(i); 
 					 checkin = (String)df.format(getMap.get("date(Rsv_InDate)")); 
 					 checkout = (String)df.format(getMap.get("date(Rsv_OutDate)"));
-//					 Object obj = getMap.get("Rom_Idx");
-//		       if(i==0){
-//		      	 revIdx = (int)obj;
-//		       }
-//					 index = ((int)obj+1) - revIdx; // 인덱스가 1부터 시작하도록 보정
-//					 no.add(index);
+
 		       List<String> temp = getDiffDays(checkin, checkout);
 		       days.addAll(temp); 
-//		       if(i == 0 || index == no.get(i-1)){  // 전데이터와 현데이터의 방이 같을때
-//		         days.addAll(temp);
-//		         if(index == dates.size()-1){ // 마지막 데이터 일때
-//		        	 dayArray.put(no.get(i), days);
-//		         }
-//		       }else{ //방이 바뀔때
-//		      	 dayArray.put(no.get(i-1), days); //이전방 번호 부여
-//		      	 days = new ArrayList<String>(); //새 방 배열 생성
-//		      	 days.addAll(temp); // 자료 입력
-//		      	 dayArray.put(no.get(i), days);
-//		       }
+
 		   }
 			return days;
+		} catch (Throwable ex) {
+			throw new RuntimeException(ex);
+		}
+	}
+  
+  @Override
+	public HashMap<Integer, ArrayList<String>> rsvDays(){
+		try {
+		   List<HashMap<String, String>> dates =  reservationDao.rsvDays();
+		   HashMap<Integer, ArrayList<String>> dayArray = new HashMap<Integer, ArrayList<String>>(); 
+		   ArrayList<String> days = new ArrayList<String>();
+		   ArrayList<Integer> no = new ArrayList<Integer>();
+		   DateFormat df = new SimpleDateFormat("yyyy-MM-dd");  
+		   String checkin, checkout, count;
+		   int index, revIdx = 0;
+		    		   
+		    for(int i=0; i < dates.size(); i++){
+					 HashMap<String, String> getMap = dates.get(i); 
+					 checkin = (String)df.format(getMap.get("date(Rsv_InDate)")); 
+					 checkout = (String)df.format(getMap.get("date(Rsv_OutDate)"));
+					 Object obj = getMap.get("Rom_Idx");
+		       if(i==0){
+		      	 revIdx = (int)obj;
+		       }
+					 index = ((int)obj+1) - revIdx; // 인덱스가 1부터 시작하도록 보정
+					 no.add(index);
+		       List<String> temp = getDiffDays(checkin, checkout);
+		       if(i == 0 || index == no.get(i-1)){  // 전데이터와 현데이터의 방이 같을때
+		         days.addAll(temp);
+		         if(index == dates.size()-1){ // 마지막 데이터 일때
+		        	 dayArray.put(no.get(i), days);
+		         }
+		       }else{ //방이 바뀔때
+		      	 dayArray.put(no.get(i-1), days); //이전방 번호 부여
+		      	 days = new ArrayList<String>(); //새 방 배열 생성
+		      	 days.addAll(temp); // 자료 입력
+		      	 dayArray.put(no.get(i), days);
+		       }
+		   }
+			return dayArray;
 		} catch (Throwable ex) {
 			throw new RuntimeException(ex);
 		}

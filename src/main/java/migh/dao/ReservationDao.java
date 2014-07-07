@@ -13,4 +13,6 @@ public interface ReservationDao {
 	int count() throws Throwable;
 	List<ReservationVo> list(int memberNo) throws Throwable;
 	List<HashMap<String,String>> getDays(int roomNo) throws Throwable;
+	List<HashMap<String,String>> rsvDays() throws Throwable;
+	List<HashMap<String,String>> perDays(int roomNo) throws Throwable;
 }

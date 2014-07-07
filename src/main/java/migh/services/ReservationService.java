@@ -19,4 +19,5 @@ public interface ReservationService {
 	void change(ReservationVo rsv);
 	void remove(ReservationVo rsv);
 	ArrayList<String> getDays(int roomNo);
+	HashMap<Integer, ArrayList<String>> rsvDays();
 }
