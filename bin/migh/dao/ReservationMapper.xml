@@ -35,13 +35,25 @@ SQL 아이디 값을 인터페이스의 메서드 이름과 같게 한다.
            R.Rom_Name, R.Rom_Price1, R.Rom_Price2, R.Rom_Price3, R.Rom_Price4
     from Reservations B, members M, Rooms R
     WHERE B.Mem_Idx = M.Mem_Idx AND B.Rom_Idx = R.Rom_Idx 
-          AND B.Mem_Idx = #{roomNo} AND date(B.Rsv_InDate) >= date(now())
+          AND B.Mem_Idx = #{roomNo} AND date(B.Rsv_OutDate) > date(now())
   </select>
   
+  <select id="allList" resultMap="rsvMap" parameterType="int">
+    SELECT B.*, 
+           M.Mem_ID, M.Mem_Name, R.Rom_MaxNo,
+           R.Rom_Name, R.Rom_Price1, R.Rom_Price2, R.Rom_Price3, R.Rom_Price4
+    from Reservations B, members M, Rooms R
+    WHERE B.Mem_Idx = M.Mem_Idx AND B.Rom_Idx = R.Rom_Idx 
+          AND date(B.Rsv_OutDate) > date(now())
+    order by B.Rsv_Idx desc
+    limit #{startIndex}, #{pageSize}
+  </select>
+   
   <select id="count" resultType="int">
     select COUNT(Rsv_Idx) AS count FROM Reservations
+    where date(Rsv_OutDate) > date(now())
   </select>  
-  
+    
   <insert id="insert" parameterType="reservationVo"
     useGeneratedKeys="true" keyColumn="Rsv_Idx" keyProperty="no">
     insert into Reservations
@@ -52,13 +64,20 @@ SQL 아이디 값을 인터페이스의 메서드 이름과 같게 한다.
   
   <update id="update" parameterType="reservationVo">
     update Reservations set
-     Rsv_Idx=#{no}, Mem_Idx=#{memberNo}, Rom_Idx=#{roomNo}, 
      Rsv_Num=#{headcount}, Rsv_InDate=#{checkin}, Rsv_OutDate=#{checkout}, 
-     Rsv_DefPrice=#{basicPrice}, Rsv_RsvPrice=#{deposit}, Rsv_DisPrice=#{discount},
-     Rsv_PayYn=#{payStatus}, Rsv_YN=#{rsvStatus}, Rsv_PayBack=#{refund}
-    where Rsv_Idx=#{no} AND Mem_Idx=#{memberNo} AND Rom=Idx{roomNo}
+     Rsv_DefPrice=#{basicPrice}
+    where Rsv_Idx=#{no} AND Mem_Idx=#{memberNo} AND Rom_Idx=#{roomNo}
   </update>
     
+  <update id="allUpdate" parameterType="reservationVo">
+    update Reservations set
+     Rsv_Num=#{headcount}, Rsv_InDate=#{checkin}, Rsv_OutDate=#{checkout}, 
+     Rsv_DefPrice=#{basicPrice}, Rsv_RsvPrice = #{deposit},
+     Rsv_DisPrice=#{discount}, Rsv_PayYN=#{payStatus}, Rsv_YN=#{rsvStatus},
+     Rsv_Payback=#{refund}
+    where Rsv_Idx=#{no} AND Mem_Idx=#{memberNo} AND Rom_Idx=#{roomNo}
+  </update>
+  
   <delete id="delete" parameterType="reservationVo">
     delete from Reservations
     where Rsv_Idx=#{no} AND Mem_Idx=#{memberNo} AND Rom_Idx=#{roomNo}
@@ -67,9 +86,16 @@ SQL 아이디 값을 인터페이스의 메서드 이름과 같게 한다.
   <select id="getDays" resultType="java.util.HashMap" parameterType="int">
    SELECT date(Rsv_InDate), date(Rsv_OutDate)
     from Reservations 
-    where date(Rsv_InDate) >= date(now()) and Rsv_YN = 'Y'
+    where date(Rsv_OutDate) > date(now()) and Rsv_YN = 'Y'
           and Rom_Idx = #{roomNo}
     order by Rom_Idx, RSV_InDate asc
+  </select>
+  
+  <select id="rsvDays" resultType="java.util.HashMap" parameterType="int">
+   SELECT Rom_Idx, date(Rsv_InDate), date(Rsv_OutDate)
+    from Reservations 
+    where date(Rsv_OutDate) > date(now()) and Rsv_YN = 'Y'
+    order by Rom_Idx, Rsv_InDate asc
   </select>
   
 </mapper>

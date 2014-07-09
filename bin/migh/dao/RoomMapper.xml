@@ -22,8 +22,6 @@ SQL 아이디 값을 인터페이스의 메서드 이름과 같게 한다.
     <result column="Rom_Price2" property="offWePrice"/> <!--  비수기 주말가격 -->
     <result column="Rom_Price3" property="peakWdPrice"/> <!--  성수기 주중가격 -->
     <result column="Rom_Price4" property="peakWePrice"/> <!--  성수기 주말가격 -->
-<!--     <result column="RoomPic_Idx" property="picNo"/> 사진번호 -->
-<!--     <result column="Rom_Pic1" property="picPath"/> 사진경로 -->
   </resultMap> 
   
   <resultMap type="migh.vo.RoomPicVo" id="picMap">

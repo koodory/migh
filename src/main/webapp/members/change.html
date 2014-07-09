@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport"
+  content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
+
+<title>회원 가입</title>
+<link rel="stylesheet" href="../css/jquery.mobile-1.4.2.min.css" />
+<link rel="stylesheet" href="../css/bootstrap.min.css">
+<link rel="stylesheet" href="../css/bootstrap-theme.min.css">
+<link rel="stylesheet" href="../css/common.css">
+<script src="../js/jquery-1.11.1.js"></script>
+<script src="../js/jquery.mobile-1.4.2.min.js"></script>
+
+<style type="text/css">
+.demo {
+	display: none;
+}
+</style>
+
+<script src="datepicker/js/mobiscroll.core.js"></script>
+<script src="datepicker/js/mobiscroll.scroller.js" type="text/javascript"></script>
+<script src="datepicker/js/mobiscroll.datetime.js" type="text/javascript"></script>
+<script src="datepicker/js/mobiscroll.select.js" type="text/javascript"></script>
+<script src="datepicker/js/mobiscroll.scroller.jqm.js" type="text/javascript"></script>
+<script src="datepicker/js/mobiscroll.scroller.ios.js" type="text/javascript"></script>
+<script src="datepicker/js/mobiscroll.scroller.android.js"
+  type="text/javascript"></script>
+<script src="datepicker/js/mobiscroll.scroller.android-holo.js"
+  type="text/javascript"></script>
+<script src="datepicker/js/mobiscroll.scroller.wp.js" type="text/javascript"></script>
+<link href="datepicker/css/mobiscroll.icons.css" rel="stylesheet"
+  type="text/css" />
+<link href="datepicker/css/mobiscroll.scroller.css" rel="stylesheet"
+  type="text/css" />
+<link href="datepicker/css/mobiscroll.scroller.jqm.css" rel="stylesheet"
+  type="text/css" />
+<link href="datepicker/css/mobiscroll.animation.css" rel="stylesheet"
+  type="text/css" />
+
+<script src="dialog.js"></script>
+</head>
+
+<body>
+  <div data-role="page">
+    <div data-role='header' data-theme='b'>
+      <h3>회원가입</h3>
+    </div>
+
+    <div data-role='content' class='posCenter' data-add-back-btn='true'>
+      <form id="changeForm" action="#" method="post">
+        <table style="width: 100%;">
+          <tr>
+            <td class="td-label no-border"><span for="name">이름</span></td>
+            <td class="no-border"><input type='text' id="name" name="name" maxlength="20" size="20"
+                 readonly="readonly" placeholder="이름을 입력하세요" /></td>
+          </tr>
+          <tr>
+            <td class="td-label no-border"><span for="id">아이디</span></td>
+            <td class="no-border"><input type='text' id="id" name="id" maxlength="20" size="20"
+                 readonly="readonly" placeholder="아이디를 입력하세요" /></td>
+          </tr>
+
+          <tr>
+            <td class="td-label no-border"></td>
+            <td id="td-id" class="left no-border"></td> <!-- 아이디 상태 알림 문구 -->
+          </tr>
+
+          <tr>
+            <td class="td-label no-border"><span for="password">암호</span></td>
+            <td class="no-border"><input type='password' id="password" name='password' maxlength="32" size="32"
+                 onkeyup="pw_comp_check()" placeholder="암호를 입력하세요" /></td>
+          </tr>
+
+         <tr>
+            <td class="td-label no-border"></td>
+            <td id="td-pw1" class="left no-border"></td> <!-- 암호 상태 알림 문구 -->
+          </tr>
+
+          <tr>
+            <td class="td-label no-border"><span class="left">암호확인</span></td>
+            <td class="no-border"><input type='password' id="password2"  maxlength="32" size="32"
+               onkeyup="pw_dup_check()" placeholder="암호를 한번더 입력하세요" /></td>
+          </tr>
+
+          <tr>
+            <td class="td-label no-border"></td>
+            <td id="td-pw2" class="left no-border"></td> <!-- 암호 상태 알림 문구 -->
+          </tr>
+
+          <tr>
+            <td class="td-label no-border"><span for="email">이메일</span></td>
+            <td class="no-border"><input type='email' id="email"  name="email" maxlength="20" size="20"
+             readonly="readonly" placeholder="이메일 주소를 입력하세요" /></td>
+          </tr>
+
+          <tr>
+            <td class="td-label no-border"></td>
+            <td id = 'td-email'class="left no-border"></td>
+          </tr>
+
+          <tr>
+            <td class="td-label no-border"><span for="telephone">전화번호</span></td>
+            <td class="no-border"><input type="text" id="telephone" name="telephone" maxlength="15" size="15"
+                 onkeyup="tel_check()" placeholder="-없이 입력하세요" /></td>
+          </tr>
+         
+          <tr>
+            <td class="td-label no-border"></td>
+            <td id="td-tel" class="left no-border"></td>
+          </tr>
+         
+          <tr>
+            <td class="td-label no-border">
+            <span for="birthDate"  class="left">생년월일</span></td>
+            <td class="no-border"><input id="birthDate" type='date' name="birthDate"
+                 onchange="btnPress()"  class="demo-test-date demo-test-datetime demo-test-time demo-test-credit" /></td>
+          </tr>
+        </table>
+        <div class="settings demo">
+          <div data-role="fieldcontain">
+            <span for="mode">Mode</span> <select name="mode" id="mode">
+              <option value="scroller">Scroller</option>
+              <option value="clickpick">Clickpick</option>
+              <option value="mixed">Mixed</option>
+            </select>
+          </div>
+          <div data-role="fieldcontain">
+            <span for="display">Display</span> <select name="display"
+              id="display">
+              <option value="modal">Modal</option>
+              <option value="inline">Inline</option>
+              <option value="bubble">Bubble</option>
+              <option value="top">Top</option>
+              <option value="bottom">Bottom</option>
+            </select>
+          </div>
+          <div data-role="fieldcontain">
+            <span for="animation">Animation</span> <select name="animation"
+              id="animation" class="settings">
+              <option value="">None</option>
+              <option value="fade">Fade</option>
+              <option value="flip">Flip</option>
+              <option value="pop">Pop</option>
+              <option value="swing">Swing</option>
+              <option value="slidehorizontal">Slide Horizontal</option>
+              <option value="slidevertical">Slide Vertical</option>
+              <option value="slidedown">Slide Down</option>
+              <option value="slideup">Slide Up</option>
+            </select>
+          </div>
+          <div data-role="fieldcontain">
+            <span for="demo">Demo</span> <select name="demo" id="demo">
+              <option value="date">Date</option>
+              <option value="datetime">Datetime</option>
+              <option value="time">Time</option>
+              <option value="credit">Credit card expiration</option>
+              <option value="select">Select</option>
+              <option value="select-opt">Group Select</option>
+            </select>
+          </div>
+        </div>
+
+        <a href="#" data-transition="slide">
+          <button type="button" data-role="none" id="loginBtnAdd" 
+            class="btn btn-primary btn-lg btn-block top-margin-p01">정보 수정
+          </button>
+        </a>
+        <a href="#" data-transition="slide">
+          <button type="button" id="loginCancel" 
+            onclick="location.href='../auth/login.html'" >변경 취소</button>
+        </a>
+      </form>
+    </div>
+  </div>
+  <script src="../js/common.js"></script>
+  <script src="join.js"></script>
+</body>
+</html>
+

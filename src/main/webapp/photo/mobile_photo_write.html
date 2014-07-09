@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>photo_write</title>
+<title>포토 앨범</title>
 <meta name="viewport"
 	content="width=device-width, height=device-height, 
   initial-scale=1.0,minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"
@@ -13,48 +13,32 @@
 
 <body>
 	<div data-role="page">
-		<div data-role='header' data-theme='b' data-add-back-btn='true'
+		<div data-role='header' data-theme='b' data-add-back-btn='true header-bar'
 			class="center">
-			<h1>포토앨범</h1>
+			<a href="#" data-icon="arrow-l" data-role="button" class="header-middle"
+        onclick="location.href='../photo/mobile_photo.html'">뒤로가기</a>
+			<h1>포토 앨범</h1>
 		</div>
 
 		<div data-role='content'>
 			<h1 class='center'>사진 등록</h1>
 			<div class='right'>
-        <span id="currTime">날짜</span>
+        <span id="currTime"></span>
 			</div>
-
-			<!-- <form action="upload.ajax" method="post" enctype="multipart/form-data">
-				세션에 있는 멤버 Idx 번호: <input type="text" name="memberNo"><br>
-				포토 타이틀: <input type="text" name="photosTitle"><br>
-				포토 컨텐츠: <input type="text" name="photosContent"><br>  
-				파일명: <input type="file" name="file1"><br>
-				<input type="submit" value="업로드">
-			</form> -->
-				<!-- 세션에 있는 멤버 Idx 번호: <input type="text" id="memberNo"><br> -->
-<!-- 			<form action="insert.ajax" method="post" enctype="multipart/form-data"> -->
-				<form name="multiform" id="multiform" action="insert.ajax" method="POST" enctype="multipart/form-data"
-					data-ajax="false" >
-				회원 Idx:<input type="text" name="memberNo" id="memberNo"><br>
-				포토 타이틀: <input type="text" name="photosTitle" id="photosTitle"><br>
-				포토 컨텐츠: <input type="text" name="photosContent" id="photosContent"><br> 
-				파일명: <input type="file" id="photoFile" name="photoFile"><br>
-				<input  type="submit" id="btnRegist" class="ui-shadow ui-btn ui-corner-all ui-mini" value="업로드">
+				<form name="multiform" id="multiform" class="multiform" action="insert.ajax" method="POST" 
+				enctype="multipart/form-data" data-ajax="false" >
+				<input type="text" name="memberNo" id="memberNo" data-role="none" style="display:none;"><br>
+				사진 제목:<input type="text" name="photosTitle" id="photosTitle"><br>
+				사진 내용:<input type="text" name="photosContent" id="photosContent"><br> 
+				파일 첨부:<input type="file" id="photoFile" name="photoFile"><br>
+				<input type="submit" id="btnRegist" class="ui-shadow ui-corner-all ui-mini" value="등록">
 				</form>
-
-<!-- 				<form action="insert.ajax" method="post" enctype="multipart/form-data" data-ajax="false"> -->
-<!-- 				회원 Idx:<input type="text" name="memberNo" id="memberNo"> -->
-<!-- 				포토 타이틀: <input type="text" name="photosTitle" id="photosTitle"><br> -->
-<!-- 				포토 컨텐츠: <input type="text" name="photosContent" id="photosContent"><br>   -->
-<!-- 				파일명: <input type="file" id="photoFile" name="photoFile"><br> -->
-<!-- 				<input  type="submit" id="btnRegist" value="업로드"> -->
-<!-- 				<button id="btnRegist">등록하기</button> -->
-<!-- 				</form> -->
+				<div id='alarm' class="center"></div>
 		</div>
 		<div data-role="footer" data-theme="b" data-position="fixed">
 			<div data-role="navbar">
 				<ul>
-					<li><a href='mobile_photo01.html' data-icon="back">뒤로</a></li>
+					<li><a href='#' onclick='location.href="../photo/mobile_photo.html"'data-icon="back">뒤로</a></li>
 					<li><a href='#' onclick='location.href="../index.html"'
 						data-icon="home">메인</a></li>
 				</ul>
@@ -64,7 +48,6 @@
 	<script src="../js/jquery-1.11.1.js"></script>
 	<script src="../js/jquery.mobile-1.4.2.min.js"></script>
 	<script src="../js/common.js"></script>
-	<script src="photo.js"></script>
+	<script src="mobile_photo_write.js"></script>
 </body>
 </html>
-<!-- http://localhost:8080/TestApp/qna/mobile_qna_write.html  -->

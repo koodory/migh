@@ -9,7 +9,6 @@ import migh.vo.ReservationVo;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -45,7 +44,21 @@ public class ReservationControl {
 			.setData(params);
 	}
 	
-		
+	@RequestMapping("/allList")
+	public AjaxResult allList(
+			@RequestParam(value="pageNo",defaultValue="1") int pageNo, 
+			@RequestParam(value="pageSize",defaultValue="5") int pageSize){
+
+		HashMap<String,Object> params = new HashMap<String,Object>();
+		params.put("count", reservationService.count());
+		params.put("rsvDays", reservationService.rsvDays());
+    params.put("allList",  reservationService.allList(pageNo, pageSize));
+    
+   return new AjaxResult()
+			.setStatus("ok")
+			.setData(params);
+	}
+	
 	@RequestMapping(value="/insert", method=RequestMethod.POST)
 	public AjaxResult insert(ReservationVo vo) {		
 		reservationService.add(vo);
@@ -53,11 +66,17 @@ public class ReservationControl {
 	}
 
 	@RequestMapping(value="/update", method=RequestMethod.POST)
-	public AjaxResult update(ReservationVo vo, Model model) {
+	public AjaxResult update(ReservationVo vo) {
 		reservationService.change(vo);
 		return new AjaxResult().setStatus("ok");
 	}
 
+	@RequestMapping(value="/allUpdate", method=RequestMethod.POST)
+	public AjaxResult allUpdate(ReservationVo vo) {
+		reservationService.allChange(vo);
+		return new AjaxResult().setStatus("ok");
+	}
+	
 	@RequestMapping(value="/delete", method=RequestMethod.POST)
 	public AjaxResult delete(ReservationVo vo) {
 		reservationService.remove(vo);

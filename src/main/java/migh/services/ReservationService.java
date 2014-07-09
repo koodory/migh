@@ -15,8 +15,10 @@ import migh.vo.ReservationVo;
 public interface ReservationService {
 	int count();
 	List<ReservationVo> list(int memberNo);
+	List<ReservationVo> allList(int pageNo, int pageSize);
 	void add(ReservationVo rsv);
 	void change(ReservationVo rsv);
+	void allChange(ReservationVo rsv);
 	void remove(ReservationVo rsv);
 	ArrayList<String> getDays(int roomNo);
 	HashMap<Integer, ArrayList<String>> rsvDays();

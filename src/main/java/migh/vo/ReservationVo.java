@@ -17,7 +17,7 @@ public class ReservationVo implements Serializable{
   private int discount; //할인액
   private char payStatus; //완납여부
   private char rsvStatus; //예약여부
-  private char refund; //환불금   
+  private int refund; //환불금   
 	private String userName; //예약자 이름
   private String roomName; //방이름
   private int accomodate; //수용인원
@@ -106,10 +106,10 @@ public class ReservationVo implements Serializable{
 		this.rsvStatus = rsvStatus;
 		return this;
 	}
-	public char getRefund() {
+	public int getRefund() {
 		return refund;
 	}
-	public ReservationVo setRefund(char refund) {
+	public ReservationVo setRefund(int refund) {
 		this.refund = refund;
 		return this;
 	}	

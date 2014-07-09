@@ -355,7 +355,7 @@ var confirmRSV = function(){
 	.append(tableData("기본 입실료", rsv.basicPrice + "원"))
 	.append(tableData("예약금", rsv.deposit + "원"))
 	.append(tableData("할인료", rsv.discount + "원") )
-	.append(tableData("미납금", totCost + "원"))
+	.append(tableData("결제예정금액", totCost + "원"))
 	.append(tableData("완납여부", payText))
 
 	$("#showDetail").contents().remove();

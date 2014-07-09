@@ -5,10 +5,9 @@
   content="width=device-width, height=device-height, 
   initial-scale=1.0,minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"
   charset="utf-8">
-<title>Insert title here</title>
+<title>위치 정보</title>
 <link rel="stylesheet" href="../css/jquery.mobile-1.4.2.min.css" />
 <link rel="stylesheet" href="../css/common.css">
-<link rel="stylesheet" href="../css/common_euihyun.css">
 
 <style>
 html,body {
@@ -57,13 +56,15 @@ html,body {
 
     <div data-role="content">
       <div id="map-canvas"></div>
-
+      
+		<div id="controlOption">
       <div id="panel">
       <strong>교통수단: </strong>
         <select id="mode" onchange="calcRoute();">
-          <option value="DRIVING">자가용</option>
-          <option value="WALKING">도보</option>
+          <option>mode</option>
           <option value="TRANSIT">대중교통</option>
+<!--           <option value="DRIVING">자가용</option> -->
+<!--           <option value="WALKING">도보</option> -->
         </select>
       </div>
 
@@ -72,9 +73,12 @@ html,body {
         <select id="start" onchange="calcRoute();">
           <option value="pos">현위치</option>
           <option value="seoul, kr">서울</option>
+          <option value="daejeon, kr">대전</option>
+          <option value="daegu, kr">대구</option>
           <option value="busan, kr">부산</option>
-
+          <option value="busan, kr" style="display:none">부산</option>
         </select>
+      </div>
       </div>
 
 

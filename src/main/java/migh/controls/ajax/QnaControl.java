@@ -47,7 +47,7 @@ public class QnaControl {
 	}
 
 	@RequestMapping(value="/update", method=RequestMethod.POST)
-	public AjaxResult update(QnaVo vo, Model model) {
+	public AjaxResult update(QnaVo vo) {
 		qnaService.change(vo);
 		return new AjaxResult().setStatus("ok");
 	}

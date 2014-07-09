@@ -13,6 +13,7 @@ import javax.management.RuntimeErrorException;
 import migh.dao.MembersDao;
 import migh.dao.ReservationDao;
 import migh.dao.RoomDao;
+import migh.vo.QnaVo;
 import migh.vo.ReservationVo;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +35,19 @@ public class ReservationServiceImpl implements ReservationService {
   public List<ReservationVo> list(int memberNo) {
 		try {			
 			return reservationDao.list(memberNo);
+		} catch (Throwable ex) {
+			throw new RuntimeException(ex);
+		}
+  }
+	
+	@Override
+  public List<ReservationVo> allList(int pageNo, int pageSize) {
+		try {
+			HashMap<String,Integer> params = new HashMap<String,Integer>();
+			params.put("startIndex", (pageNo - 1) * pageSize);
+			params.put("pageSize", pageSize);
+			
+			return reservationDao.allList(params);
 		} catch (Throwable ex) {
 			throw new RuntimeException(ex);
 		}
@@ -66,6 +80,15 @@ public class ReservationServiceImpl implements ReservationService {
 		}
   }
 
+	@Override
+  public void allChange(ReservationVo rsv) {
+		try {
+			reservationDao.allUpdate(rsv);
+		} catch (Throwable ex) {
+			throw new RuntimeException(ex);
+		}
+  }
+	
 	@Override
   public void remove(ReservationVo rsv){
 		try{
@@ -128,7 +151,6 @@ public class ReservationServiceImpl implements ReservationService {
 
 		       List<String> temp = getDiffDays(checkin, checkout);
 		       days.addAll(temp); 
-
 		   }
 			return days;
 		} catch (Throwable ex) {
