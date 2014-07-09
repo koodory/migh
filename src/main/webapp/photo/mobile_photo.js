@@ -29,11 +29,11 @@ function getInfo(){
 					userNo = result.data.no;
 					if(userLv == "ADMIN"){
 					}else if(userId == "GUEST" && userLv == "NORMAL"){
-						alert("회원 가입이 필요합니다.");
+						alert("사진 보기만 가능합니다.");
 //						location.href = contextPath + "/auth/login.html";
 					}
 				}else{
-					alert("사진 보기만 가능합니다.");
+					alert("통신오류");
 //					location.href = contextPath + "/auth/login.html";
 				}
 			});
