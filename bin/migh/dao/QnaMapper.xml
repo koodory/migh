@@ -45,8 +45,7 @@ SQL 아이디 값을 인터페이스의 메서드 이름과 같게 한다.
    <update id="update" parameterType="qnaVo">
     update Qna set
      Qna_Idx=#{qnaNo}, Mem_Idx=#{memberNo}, Qna_Title=#{title}, 
-     Qna_Q=#{question}, Qna_A=#{answer}, Qna_ADate=#{aDatetime}, 
-     Qna_QDate=#{qDatetime}
+     Qna_Q=#{question}, Qna_A=#{answer}, Qna_ADate=#{aDatetime}
     where Qna_Idx=#{qnaNo}
   </update>
     

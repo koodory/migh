@@ -459,8 +459,7 @@ function updateList(pos, no, title, question, answer, aDate, qDate){
 			title: title,
 			answer: answer,
 			question: question,
-			aDatetime: aDate,
-			qDatetime: qDate
+			aDatetime: currDate
 		},
 		success: function(jsonObj){
 			var result = jsonObj.ajaxResult;
