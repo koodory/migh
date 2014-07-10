@@ -13,6 +13,7 @@ var flag = true; // 메뉴 제어 변수 , true: 전체메뉴 , false: 대기글
 var pageFlag = false; //페이지 상태, 오류메세지 제어
 var count; //Q&A record 갯수 저장
 var cntIndex = 0; //페이지 세는 변수
+var writer = {}; // 작성자 저장
 
 $(document).ready(function(){
 	getInfo(); 	/* 서버의 세션에서 사용자 정보 가져옴 */
@@ -27,7 +28,8 @@ function setUI(){
 	  var node =  tag.parent().parent(); //현재 버튼 위치
 	  var currPos = (key == 'reg') ? (node.parent().parent()) : (node.parent());
 	  var index = currPos.contents(":eq(4)"); // 등록 버튼 생성 위치
-		
+		var btnIndex = Number(tag.attr("class").split(" ")[1].split("-")[1]);
+	  
 	  var getElement = function(index1, index2){
 		   return currPos.contents(":eq(" + index1 + ")").contents(index2);
 		   }	 
@@ -78,18 +80,18 @@ function setUI(){
        case 'reg':  //등록 버튼 클릭
                    setValue(); //node, no, title, question, answer, aDate, qDate
                    updateList(node, list[0], list[1], list[2], list[3], 
-            	   getDate(3,false), getDate(1,true)); 
+            	   getDate(3,false), getDate(1,true), btnIndex); 
     	           break;
        case 'ans' : //답변 버튼 클릭
     	            setValue();
                     createElement(getAnswer,list[3]);
-                    uiRegister(node, index);
+                    uiRegister(node, index, btnIndex);
     	            break;
        case 'mod' : //수정 버튼 클릭
     	            setValue();
     	            createElement(getTitle, list[1]);
     	            createElement(getQuest, list[2]);
-    	            uiRegister(node, index);
+    	            uiRegister(node, index, btnIndex);
     	            break;
        case 'del'  : // 삭제 버튼 클릭 
     	            popup(idx);
@@ -144,16 +146,16 @@ function setUI(){
 	});
 	
 	/* 데이터 전송 버튼 생성 */
-	function uiRegister(currPos, index){
+	function uiRegister(currPos, index, btnIndex){
     	currPos.remove();
 		$('<div>').addClass('ui-grid-a')
 		.append($('<div>').addClass('ui-block-a')
 		  .append($('<a>').attr('href','#').attr('data-role','button')
-		  .addClass("registBtn").text('등록')))
+		  .addClass("registBtn btn-" + btnIndex).text('등록')))
 		  
 		 .append($('<div>').addClass('ui-block-b')
 		  .append($('<a>').attr('href','#').attr('data-role','button')
-				  .addClass("cancelBtn").text('취소')))
+				  .addClass("cancelBtn btn-" + btnIndex).text('취소')))
 
 		.appendTo(index); //컨텐츠의 마지막 자식 element에만 적용할 것
 		index.trigger('create');
@@ -291,7 +293,7 @@ function reset(){
 function pageCreate(data){ // data: Json, number: Id판별 인덱스(j값)
 	var aTime = (data.adatetime != null) ? data.adatetime.substr(0,11) : ""; //질문시간 
 	var qTime = (data.qdatetime != null) ? data.qdatetime.substr(0,11) : ""; //응답시간
-	
+
 	if(data.answer == null || data.answer == '답변 대기중입니다.' || 
 	   data.answer == ''){ //응답 내용이 없을 경우
 	   answer = '답변 대기중입니다.'; //응답내용
@@ -368,7 +370,7 @@ function pageCreate(data){ // data: Json, number: Id판별 인덱스(j값)
 		var btn = function(block, msg, str){
 		  return $('<div>').addClass('ui-block-' + block)
 		         .append($('<a>').attr({ 'href':'#', 'data-role':'button'})
-		         .addClass(str).text(msg));
+		         .addClass(str + " btn-" + cntIndex).text(msg));
 		 }
 				
 		if(char == 'a'){
@@ -396,6 +398,7 @@ function pageCreate(data){ // data: Json, number: Id판별 인덱스(j값)
 	
 	$(".text-title").contents().addClass('text-block'); 
 	$('div[data-role=content]').trigger('create'); // 화면갱신
+//	setUI()
 }
 
 /* 오류 메세지 출력 */
@@ -440,7 +443,7 @@ function getInfo(){
 
 
 /* 업데이트 */
-function updateList(pos, no, title, question, answer, aDate, qDate){
+function updateList(pos, no, title, question, answer, aDate, qDate, idx){
 	if (answer.length == 0 || title.length == 0 || question.length == 0){
 		$('<div>').contents().remove();
 		$('<div>').addClass("label-alarm red center")
@@ -448,6 +451,10 @@ function updateList(pos, no, title, question, answer, aDate, qDate){
 		return;
 	}else{
 		$('label-alarm').remove();
+	}
+	
+	if(userLv == "ADMIN"){ // 관리자 번호로 변경되는거 방지
+	  userNo = writer[idx-1][0].memberNo;
 	}
 	
 	$.ajax(bit.contextRoot + '/qna/update.ajax', {
@@ -542,9 +549,11 @@ function loadList(pageNo, pageSize){
 			if(result.status=='ok' && resultCount > 0){
 				$('.errorMsg').remove(); //기존 오류메세지 다 삭제
 				$.each(result.data, function(index,obj){
-					$.each(obj, function(index,data){
+					$.each(obj, function(index2,data){
 						cntIndex++;
 						pageCreate(data);
+							writer[index2] = [];
+							writer[index2].push(data);
 					});
 				});
 				currPageNo = pageNo;

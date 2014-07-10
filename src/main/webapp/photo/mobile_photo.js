@@ -33,7 +33,7 @@ function getInfo(){
 //						location.href = contextPath + "/auth/login.html";
 					}
 				}else{
-					alert("통신오류");
+					alert("사진보기만 가능합니다.");
 //					location.href = contextPath + "/auth/login.html";
 				}
 			});
